@@ -62,6 +62,30 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   text-transform: uppercase;
   line-height: 100%;
 }
+/* ====================== Header Layout ====================== */
+.filter-options {
+  grid-area: filter;
+  display: grid;
+  grid-template-areas:
+    "head head"
+    "neigh cusine";
+  grid-column-gap: 2vmin;
+  padding: 1vmin;
+}
+  #filter-header {
+    grid-area: head;
+  }
+  #neighborhoods-select {
+    grid-area: neigh;
+  }
+  #cusines-select {
+    grid-area: cusine;
+  }
+
+  #map-container {
+    grid-area: map;
+  }
+
 /* ====================== Navigation ====================== */
 nav {
   width: 100%;
@@ -133,7 +157,30 @@ nav h1 a {
   font-size: 1rem;
   letter-spacing: 0;
 }
+/* ====================== Restaurant List Layout ====================== */
+  #restaurants-list {
+    grid-area: list;
+    display: grid;
+  }
 
+  #restaurants-list li {
+    display: grid;
+    grid-template-rows: 60% 40%;
+    border: 2vmin solid #363636;
+    justify-items: right;
+  }
+    .restaurant-img {
+      grid-row:1 / 3;
+      grid-column: 1 / 2;
+      
+    }
+    .restaurant-card {
+      grid-row: 2 / 3;
+      grid-column: 1 / 2;
+      display: grid;
+      background-color: rgba(0, 0, 0, .7);
+      width: 100%;
+    }
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
   background-color: #f3f3f3;
@@ -305,9 +352,6 @@ nav h1 a {
     grid-area: comments;
   }
 
-
-
-
 /*=====================================Layouts==============================*/
 
 /* ====================== Mobile Version/Default ====================== */
@@ -342,7 +386,7 @@ body {
   footer {
     grid-area: footer;
   }
-/* ====================== Tablet Version ====================== */
+/* ====================== Tablet / Laptop Version ====================== */
 @media screen and (min-width: 1000px) {
   #maincontent {
     grid-template-areas:
@@ -394,53 +438,3 @@ body {
     overflow: auto;
   }
 }
-/* ====================== Header Layout ====================== */
-.filter-options {
-  grid-area: filter;
-  display: grid;
-  grid-template-areas:
-    "head head"
-    "neigh cusine";
-  grid-column-gap: 2vmin;
-  padding: 1vmin;
-}
-  #filter-header {
-    grid-area: head;
-  }
-  #neighborhoods-select {
-    grid-area: neigh;
-  }
-  #cusines-select {
-    grid-area: cusine;
-  }
-
-  #map-container {
-    grid-area: map;
-  }
-
-
-/* ====================== Restaurant List Layout ====================== */
-  #restaurants-list {
-    grid-area: list;
-    display: grid;
-  }
-
-  #restaurants-list li {
-    display: grid;
-    grid-template-rows: 60% 40%;
-    border: 2vmin solid #363636;
-    justify-items: right;
-  }
-    .restaurant-img {
-      grid-row:1 / 3;
-      grid-column: 1 / 2;
-      
-    }
-    .restaurant-card {
-      grid-row: 2 / 3;
-      grid-column: 1 / 2;
-      display: grid;
-      background-color: rgba(0, 0, 0, .7);
-      width: 100%;
-    }
-
