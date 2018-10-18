@@ -18,7 +18,7 @@ html {
 }
 
 body {
-	background-color: #fdfdfd;
+	background-color: #363636;
   height: 100%;
   overflow: auto;
 }
@@ -60,6 +60,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   font-size: 1rem;
   text-align: center;
   text-transform: uppercase;
+  line-height: 100%;
 }
 /* ====================== Navigation ====================== */
 nav {
@@ -75,6 +76,7 @@ nav h1 a {
   font-size: 5vmin;
   font-weight: 200;
   letter-spacing: 1rem;
+  line-height: 8vmin;
   text-transform: uppercase;
 }
 #breadcrumb {
@@ -108,7 +110,9 @@ nav h1 a {
 /* ====================== Map ====================== */
 #map {
   width: 100%;
+  height: 100%;
   background-color: #ccc;
+  border: 2vmin solid #363636;
 }
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
@@ -135,10 +139,10 @@ nav h1 a {
   background-color: #f3f3f3;
   list-style: outside none none;
   text-align: center;
+  padding: 0;
 }
 #restaurants-list li {
   background-color: #fff;
-  border: 2px solid #ccc;
   font-family: Arial,sans-serif;
   text-align: center;
 
@@ -167,89 +171,146 @@ nav h1 a {
 }
 
 /* ====================== Restaurant Details ====================== */
-.inside header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
+.inside body {
+  display: grid;
+  grid-template-areas:
+  "header"
+  "main"
+  "footer";
+  grid-template-rows: 8vh 1fr 5vh;
 }
-.inside #map-container {
-  background: blue none repeat scroll 0 0;
-  position: fixed;
-  right: 0;
-  width: 50%;
+
+.inside #maincontent {
+  grid-area: main;
+  display: grid;
+  grid-template-areas:
+    "map"
+    "info"
+    "reviews";
+  grid-template-rows: 33vh auto auto;
 }
-.inside #map {
-  background-color: #ccc;
-  height: 100%;
-  width: 100%;
+
+/* ====================== Restaurant Details Card ====================== */
+#restaurant-container {
+  grid-area: info;
+  display: grid;
+  grid-gap: 2vmin;
+  grid-template-rows: 15% 10% 75%;
+  grid-template-columns: 40% 60%;
+  padding-bottom: 4vmax;
+  padding-right: 2vmax;
+  border: 2vmin solid #363636;
+
 }
-.inside #footer {
-  bottom: 0;
-  position: absolute;
-  width: 50%;
+#restaurant-img {
+  grid-row: 3 / 4;
+  grid-column: 1 / 2;
+  align-self: center;
 }
+
 #restaurant-name {
   color: #f18200;
+  font-size: 6vmin;
   font-family: Arial,sans-serif;
-  font-size: 2rem;
   font-weight: 200;
   letter-spacing: 0;
   text-transform: uppercase;
+  align-self: center;
   line-height: 1.1;
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
 }
-#restaurant-img {
-	width: 90%;
-}
+
 #restaurant-address {
-  font-size: 1.2rem;
+  grid-row: 2 / 3;
+  grid-column: 1 / 3;
+  text-align: center;
+  font-size: 4vmin;
 }
 #restaurant-cuisine {
   background-color: #333;
   color: #ddd;
-  font-size: 1.2rem;
+  font-size: 4vmin;;
   font-weight: 300;
-  letter-spacing: 10px;
+  letter-spacing: .5vmin;
   text-align: center;
   text-transform: uppercase;
-	width: 90%;
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
 }
-#restaurant-container, #reviews-container {
-  border-bottom: 1px solid #d9d9d9;
-  border-top: 1px solid #fff;
-  width: 50%;
+#restaurant-hours {
+  font-size: 3vmin;
+  grid-row: 3 / 4;
+  grid-column: 2 / 3;
 }
+#restaurant-hours td {
+  color: #666;
+  font-size: 3vmin;
+}
+
+/* ====================== Reviews Card ====================== */
+
 #reviews-container {
-  padding: 0px;
+  grid-area: reviews;
+  display: grid;
+  grid-template-areas: 
+    "rev-head"
+    "reviews-li";
+  grid-template-rows: 5vmax auto;
+}
+#reviews-list {
+  padding: 0;
 }
 #reviews-container h2 {
+  grid-area: rev-head;
   color: #f58500;
   font-size: 2rem;
   font-weight: 300;
   letter-spacing: -1px;
-}
-#reviews-list {
-  margin: 0;
-  padding: 0;
-}
-#reviews-list li {
-  background-color: #fff;
-  border: 2px solid #f3f3f3;
-  display: block;
-  list-style-type: none;
-  overflow: hidden;
-  position: relative;
-  width: 85%;
+  justify-self: center;
+  line-height: 100%;
 }
 
-#restaurant-hours td {
-  color: #666;
+#reviews-list li {
+  grid-area: review-li;
+  display: grid;
+  padding: 2vmin;
+  grid-row-gap: 3vh;
+  background-color: #fff;
+  border-top: 2vmin solid #363636;
+  border-bottom: 2vmin solid #363636;
+  list-style-type: none;
+  grid-template-areas: 
+    "name date"
+    "rating rating"
+    "comments comments";
+  grid-template-rows: 15% 10% 75%;
+  grid-template-columns: 50% 50%;
 }
+  .review-name {
+    grid-area: name;
+    color: #f58500;
+    font-size: 1.5rem;
+  }
+  .review-date {
+    grid-area: date;
+    justify-self: end;
+  }
+  .review-rating {
+    grid-area: rating;
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+  .review-comments {
+    grid-area: comments;
+  }
+
+
 
 
 /*=====================================Layouts==============================*/
 
-/* Mobile Version/Default */
+/* ====================== Mobile Version/Default ====================== */
 body {
   display: grid;
   grid-template-areas:
@@ -262,26 +323,78 @@ body {
     grid-area: header;
     background: #333;
     width: 100%;
-    height: 5vh;
+    height: 8vh;
     justify-content: center;
     align-items: center;
     position: absolute;
     top: 0;
+    z-index: 2000;
   }
   #maincontent {
     grid-area: main;
     display: grid;
     grid-template-areas:
-      "filter"
       "map"
+      "filter"
       "list";
-    grid-template-rows: 5vh 40vh auto;
+    grid-template-rows: 33vh 8vh auto;
   }
   footer {
     grid-area: footer;
   }
+/* ====================== Tablet Version ====================== */
+@media screen and (min-width: 1000px) {
+  #maincontent {
+    grid-template-areas:
+      "filter list"
+      "map list";
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 10vh 80vh;
+  }
+  header {
+    position: absolute;
+    top: 0;
+  }
+  footer {
+    position: absolute;
+    bottom: 0;
+    z-index: 2000;
+    width: 100%;
+  }
+  #restaurants-list {
+    height: 90vh;
+    overflow: auto;
+  }
+  #restaurants-list li a {
+    font-size: 3vmin;
+  }
+  #restaurants-list li p {
+    font-size: 2.5vmin;
+  }
 
-/* Header layout */
+  .inside #maincontent {
+    grid-area: main;
+    display: grid;
+    height: 87vh;
+    grid-template-areas:
+      "info reviews"
+      "map reviews";
+    grid-template-rows: 50vh 40vh;
+  }
+  #restaurant-container h1 {
+    font-size: 3vmin;
+  }
+  #restaurant-container p {
+    font-size: 2vmin;
+  }
+  #restaurant-container td {
+    font-size: 2vmin;
+  }
+  #reviews-list {
+    overflow: auto;
+  }
+}
+/* ====================== Header Layout ====================== */
 .filter-options {
   grid-area: filter;
   display: grid;
@@ -300,41 +413,34 @@ body {
   #cusines-select {
     grid-area: cusine;
   }
-  
+
   #map-container {
     grid-area: map;
   }
 
 
-  /* Restaurant List Layout */
+/* ====================== Restaurant List Layout ====================== */
   #restaurants-list {
+    grid-area: list;
     display: grid;
-    padding: 2vmin;
   }
 
   #restaurants-list li {
-    grid-area: list;
     display: grid;
-    grid-template-rows: 60% 20% 10% 10%;
-    max-height: 30vh;
+    grid-template-rows: 60% 40%;
+    border: 2vmin solid #363636;
+    justify-items: right;
   }
     .restaurant-img {
-      grid-row:1 / 5;
+      grid-row:1 / 3;
       grid-column: 1 / 2;
       
     }
-    .restaurant-name {
-      grid-row:2 / 3;
+    .restaurant-card {
+      grid-row: 2 / 3;
       grid-column: 1 / 2;
+      display: grid;
       background-color: rgba(0, 0, 0, .7);
+      width: 100%;
     }
-    .restaurant-neighborhood {
-      grid-row:3 / 4;
-      grid-column: 1 / 2;
-      background-color: rgba(0, 0, 0, .7);
-    }
-    .restaurant-address {
-      grid-row:4 / 5;
-      grid-column: 1 / 2;
-      background-color: rgba(0, 0, 0, .7);
-    }
+
