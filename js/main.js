@@ -11,8 +11,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
+  tabOrder();
 });
 
+tabOrder = () => {
+  var zoom = document.getElementsByClassName('leaflet-control-zoom-in');
+  var out = document.getElementsByClassName('leaflet-control-zoom-out');
+  var leaf = document.getElementsByClassName('leaflet-control-attribution');
+
+  leaf[0].firstChild.setAttribute('tabindex', '-1');
+  zoom[0].setAttribute('tabindex', '-1');
+  out[0].setAttribute('tabindex', '-1');
+}
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -75,6 +85,7 @@ initMap = () => {
   self.newMap = L.map('map', {
         center: [40.722216, -73.987501],
         zoom: 12,
+        keyboard: false,
         scrollWheelZoom: false
       });
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
@@ -87,6 +98,7 @@ initMap = () => {
   }).addTo(newMap);
 
   updateRestaurants();
+
 }
 
 
