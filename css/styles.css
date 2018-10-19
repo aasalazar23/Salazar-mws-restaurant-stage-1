@@ -181,14 +181,6 @@ header {
   
 
 /* ====================== Restaurant Details ====================== */
-.inside body {
-  display: grid;
-  grid-template-areas:
-  "header"
-  "main"
-  "footer";
-  grid-template-rows: 8vh 1fr 5vh;
-}
 
 .inside #maincontent {
   grid-area: main;
@@ -197,37 +189,37 @@ header {
     "map"
     "info"
     "reviews";
-  grid-template-rows: 33vh auto auto;
+  grid-template-rows: 33vh 40vh auto;
 }
 
 /* ====================== Restaurant Details Card ====================== */
 #restaurant-container {
   grid-area: info;
   display: grid;
-  grid-gap: 2vmin;
+  grid-gap: 2vh;
   height: 40vh;
-  grid-template-rows: 6vh 4vh 30vh;
+  grid-template-rows: 6vh 3vh 29vh;
   grid-template-columns: 2fr 3fr;
-  padding-bottom: 4vmax;
-  padding-right: 2vmax;
-  border: 2vmin solid #363636;
+  padding: 1vh;
+  background-color: #fff;
 
 }
 #restaurant-img {
   grid-row: 3 / 4;
   grid-column: 1 / 2;
-  align-self: center;
+  object-fit: cover;
+  height: 25vh;
+  width: 100%;
 }
 
 #restaurant-name {
   color: #f18200;
-  font-size: 6vmin;
-  font-family: Arial,sans-serif;
+  font-size: 5vmin;
   font-weight: 200;
   letter-spacing: 0;
   text-transform: uppercase;
   align-self: center;
-  line-height: 1.1;
+  text-align: center;
   grid-row: 1 / 2;
   grid-column: 2 / 3;
 }
@@ -244,6 +236,7 @@ header {
   font-size: 4vmin;;
   font-weight: 300;
   letter-spacing: .5vmin;
+  line-height: 6vh;
   text-align: center;
   text-transform: uppercase;
   grid-row: 1 / 2;
@@ -268,7 +261,6 @@ header {
   grid-template-areas: 
     "rev-head"
     "reviews-li";
-  grid-template-rows: 5vmax auto;
 }
 #reviews-list {
   padding: 0;
@@ -276,7 +268,7 @@ header {
 #reviews-container h2 {
   grid-area: rev-head;
   color: #f58500;
-  font-size: 2rem;
+  font-size: 6vmin;
   font-weight: 300;
   letter-spacing: -1px;
   justify-self: center;
@@ -301,7 +293,7 @@ header {
   .review-name {
     grid-area: name;
     color: #f58500;
-    font-size: 1.5rem;
+    font-size: 5vmin;
   }
   .review-date {
     grid-area: date;
@@ -309,11 +301,12 @@ header {
   }
   .review-rating {
     grid-area: rating;
-    font-size: 1.2rem;
+    font-size: 5vmin;
     font-weight: 300;
   }
   .review-comments {
     grid-area: comments;
+    font-size: 4vmin;
   }
 
 /*=====================================Layouts==============================*/
@@ -361,6 +354,31 @@ body {
   #restaurants-list img {
     height: 73vh;
   }
+
+  .inside #maincontent {
+    grid-area: main;
+    display: grid;
+    grid-template-areas:
+      "map"
+      "info"
+      "reviews";
+    grid-template-rows: 0vh 60vh auto;
+  }
+  #restaurant-container {
+    height: 60vh;
+    grid-template-rows: 10vh 6vh 38vh;
+  }
+  .inside #restaurant-img {
+    height: 38vh;
+    object-fit: cover;
+    width: 100%;
+  }
+  #restaurant-cuisine {
+    line-height: 10vh;
+  }
+  #restaurant-hours td {
+    font-size: 4vmin;
+  }
 }
 
 /* ====================== Tablet / Laptop Version ====================== */
@@ -400,12 +418,17 @@ body {
 
   .inside #maincontent {
     grid-area: main;
-    display: grid;
-    height: 87vh;
+
     grid-template-areas:
       "info reviews"
       "map reviews";
-    grid-template-rows: 50vh 40vh;
+    grid-template-rows: 45vh 40vh;
+  }
+  #map {
+    height: 40vh;
+  }
+  #restaurant-container {
+    height: 45vh;
   }
   #restaurant-container h1 {
     font-size: 3vmin;
@@ -418,5 +441,14 @@ body {
   }
   #reviews-list {
     overflow: auto;
+  }
+  .review-name {
+    font-size: 4vmin;
+  }
+  .review-rating {
+    font-size: 3vmin;
+  }
+  .review-comments {
+    font-size: 3vmin;
   }
 }
