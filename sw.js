@@ -1,4 +1,4 @@
-var CACHE_NAME = "restaurant-v1";
+var CACHE_NAME = "restaurant-v2";
 var urlsToCache = [
     '/',
     '/css/styles.css',
@@ -16,7 +16,8 @@ var urlsToCache = [
     '/img/7.jpg',
     '/img/8.jpg',
     '/img/9.jpg',
-    '/img/10.jpg'
+    '/img/10.jpg',
+    'data/restaurants.json'
 ];
 
 
@@ -63,13 +64,14 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-/*
+
 self.addEventListener('activate', function(event) {
 
-    var cacheWhitelist = ['pages-cache-v1', 'blog-posts-cache-v1'];
+    var cacheWhitelist = [CACHE_NAME];
   
     event.waitUntil(
       caches.keys().then(function(cacheNames) {
+          console.log(cacheNames);
         return Promise.all(
           cacheNames.map(function(cacheName) {
             if (cacheWhitelist.indexOf(cacheName) === -1) {
@@ -80,4 +82,3 @@ self.addEventListener('activate', function(event) {
       })
     );
   });
-*/
