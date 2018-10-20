@@ -95,19 +95,25 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.className = 'info-name';
   name.innerHTML = restaurant.name;
-
+  name.setAttribute("tabindex", "0");
+  
+  const cuisine = document.getElementById('restaurant-cuisine');
+  cuisine.className = 'info-cuisine';
+  cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.setAttribute("tabindex", "0");
+  
   const address = document.getElementById('restaurant-address');
   address.className = 'info-address';
   address.innerHTML = restaurant.address;
+  address.setAttribute("tabindex", "0");
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.setAttribute("alt", restaurant.alt_text);
+  image.setAttribute("tabindex", "0");
 
-  const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.className = 'info-cuisine';
-  cuisine.innerHTML = restaurant.cuisine_type;
+
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -123,6 +129,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
   hours.className = 'restaurant-hours';
+  hours.setAttribute("tabindex", "0");
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
@@ -165,6 +172,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
+  li.setAttribute('tabindex', "0");
   const name = document.createElement('p');
   name.className = 'review-name';
   name.innerHTML = review.name;

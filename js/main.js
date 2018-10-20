@@ -42,10 +42,13 @@ fetchNeighborhoods = () => {
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
+  select.setAttribute('role', 'menu');
+  select.setAttribute('aria-label', 'Neighborhood Filter Menu');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
     option.innerHTML = neighborhood;
     option.value = neighborhood;
+    option.tabIndex = "0";
     select.append(option);
   });
 }
@@ -69,11 +72,13 @@ fetchCuisines = () => {
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
-
+  select.setAttribute('role', 'menu');
+  select.setAttribute('aria-label', 'Cuisine Filter Menu');
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;
     option.value = cuisine;
+    option.tabIndex = "0";
     select.append(option);
   });
 }
@@ -163,6 +168,7 @@ createRestaurantHTML = (restaurant) => {
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = restaurant.alt_text;
+  image.tabIndex = "0";
   li.append(image);
 
   const card = document.createElement('div');
@@ -172,17 +178,20 @@ createRestaurantHTML = (restaurant) => {
   const name = document.createElement('a');
   name.className = 'restaurant-name';
   name.innerHTML = restaurant.name;
+  name.tabIndex = "0";
   name.href = DBHelper.urlForRestaurant(restaurant);
   card.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.className = 'restaurant-neighborhood';
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.tabIndex = "0";
   card.append(neighborhood);
 
   const address = document.createElement('p');
   address.className = 'restaurant-address';
   address.innerHTML = restaurant.address;
+  neighborhood.tabIndex = "0";
   card.append(address);
 
   return li
