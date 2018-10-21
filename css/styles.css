@@ -190,16 +190,16 @@ header {
     "map"
     "info"
     "reviews";
-  grid-template-rows: 33vh 40vh auto;
+  grid-template-rows: 33vh 50vh auto;
 }
 
 /* ====================== Restaurant Details Card ====================== */
 #restaurant-container {
   grid-area: info;
   display: grid;
-  grid-gap: 2vh;
-  height: 40vh;
-  grid-template-rows: 6vh 3vh 29vh;
+  grid-gap: 1vh;
+  height: 50vh;
+  grid-template-rows: 8vh 3vh 29vh;
   grid-template-columns: 2fr 3fr;
   padding: 1vh;
   background-color: #fff;
@@ -247,6 +247,7 @@ header {
   font-size: 3vmin;
   grid-row: 3 / 4;
   grid-column: 2 / 3;
+  overflow: auto;
 }
 #restaurant-hours td {
   color: #666;
@@ -367,7 +368,7 @@ body {
   }
   #restaurant-container {
     height: 60vh;
-    grid-template-rows: 10vh 6vh 38vh;
+    grid-template-rows: 10vh 6vh 42vh;
   }
   .inside #restaurant-img {
     height: 38vh;
@@ -376,9 +377,6 @@ body {
   }
   #restaurant-cuisine {
     line-height: 10vh;
-  }
-  #restaurant-hours td {
-    font-size: 4vmin;
   }
 }
 
