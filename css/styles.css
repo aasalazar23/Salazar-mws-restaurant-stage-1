@@ -63,14 +63,15 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 /* ====================== Navigation ====================== */
 nav h1 {
-  height: 10vh;
+  height: 5vh;
   text-align: center;
+  grid-area: head1;
 }
 nav h1 a {
   color: #fff;
   font-size: 4vmin;
   font-weight: 200;
-  letter-spacing: 1rem;
+  letter-spacing: 2vw;
   text-transform: uppercase;
   height: 10vh;
   width: 100%;
@@ -82,6 +83,46 @@ header {
   top: 0;
   z-index: 2000;
   width: 100vw;
+  height: 10vh;
+}
+.inside header {
+  display: grid;
+  grid-template-rows: 5vh 5vh;
+  grid-template-areas: 
+    "head1"
+    "bread";
+}
+#breadcrumb {
+  grid-area: bread;
+  list-style: none;
+  background-color: #eee;
+  font-size: 3vmin;
+  width: 30vw;
+  height: 5vh;
+}
+
+/* Display list items side by side */
+#breadcrumb li {
+  display: inline;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb li+li:before {
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+#breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+#breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
 }
 /* ====================== Map ====================== */
  #map-container {

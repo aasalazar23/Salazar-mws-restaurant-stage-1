@@ -41,6 +41,7 @@ initMap = () => {
           'Imagery © <a href="https://www.mapbox.com/" tabindex="-1">Mapbox</a>',
         id: 'mapbox.streets'    
       }).addTo(newMap);
+      fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
       tabOrder();
     }
