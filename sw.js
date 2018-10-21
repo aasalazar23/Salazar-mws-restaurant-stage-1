@@ -1,4 +1,4 @@
-var CACHE_NAME = "restaurant-v2";
+var CACHE_NAME = "restaurant-v3";
 var urlsToCache = [
     '/',
     '/css/styles.css',
@@ -37,6 +37,7 @@ self.addEventListener('fetch', function(event) {
         caches.match(event.request)
             .then(function(response) {
                 // cache hit - return response
+                console.log(event.request.url);
                 if (response) {
                     console.log('yay returned our cache!');
                     return response;
@@ -47,15 +48,15 @@ self.addEventListener('fetch', function(event) {
                 return fetch(fetchRequest).then(
                     function(response) {
                         // checks for valid response
-                        if(!response || response.status !== 200 || response.type !== 'basic') {
+                        if(!response || response.status !== 200) {
                             return response;
                         }
                         //must clone response. each stream can only be used once
                         var responseToCache = response.clone();
-
                         caches.open(CACHE_NAME)
                             .then(function(cache) {
                                 cache.put(event.request, responseToCache);
+                                console.log("new url response stored: ", event.request.url);
                             });
                         return response;
                     }
