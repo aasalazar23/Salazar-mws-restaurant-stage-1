@@ -363,7 +363,7 @@ body {
     "footer";
     grid-template-rows: 5vh 1fr 5vh;
 }
-.inside body {
+.inside {
   grid-template-rows: 10vh 1fr 5vh;
 }
  
@@ -401,6 +401,13 @@ body {
     height: 73vh;
   }
 
+  .inside {
+    grid-template-rows: 15vh 1fr 5vh;
+  }
+  .inside header {
+    grid-template-rows: 10vh 5vh;
+    height: 15vh;
+  }
   .inside #maincontent {
     grid-area: main;
     display: grid;
