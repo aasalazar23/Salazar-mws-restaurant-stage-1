@@ -25,13 +25,11 @@ body {
 
 body,td,th,p{
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 1rem;
 	color: #333;
 }
 
 ul, li {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 1rem;
 	color: #333;
 }
 a {
@@ -83,10 +81,12 @@ header {
   top: 0;
   z-index: 2000;
   width: 100vw;
-  height: 10vh;
+  height: 5vh;
 }
+
 .inside header {
   display: grid;
+  height: 10vh;
   grid-template-rows: 5vh 5vh;
   grid-template-areas: 
     "head1"
@@ -97,8 +97,9 @@ header {
   list-style: none;
   background-color: #eee;
   font-size: 3vmin;
-  width: 30vw;
+  width: 100vw;
   height: 5vh;
+  line-height: 5vh;
 }
 
 /* Display list items side by side */
@@ -156,15 +157,14 @@ header {
 
 .filter-options h2 {
   color: white;
-  font-size: 1rem;
+  font-size: 3vmin;
   font-weight: normal;
-  line-height: 1rem;
 }
 .filter-options select {
   background-color: white;
   border: 1px solid #fff;
   font-family: Arial,sans-serif;
-  font-size: 1rem;
+  font-size: 3vmin;
   letter-spacing: 0;
 }
 /* ====================== Restaurant List Layout ====================== */
@@ -308,7 +308,7 @@ header {
 #reviews-list {
   padding: 0;
 }
-#reviews-container h2 {
+#reviews-container h3 {
   grid-area: rev-head;
   color: #f58500;
   font-size: 6vmin;
@@ -361,7 +361,10 @@ body {
     "header"
     "main"
     "footer";
-    grid-template-rows: 10vh 1fr 5vh;
+    grid-template-rows: 5vh 1fr 5vh;
+}
+.inside body {
+  grid-template-rows: 10vh 1fr 5vh;
 }
  
   #maincontent {
@@ -431,9 +434,7 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 10vh 75vh;
   }
-  nav h1 a {
-    line-height: 10vh;
-  }
+
   footer {
     position: absolute;
     bottom: 0;
@@ -464,7 +465,7 @@ body {
       "map reviews";
     grid-template-rows: 45vh 40vh;
   }
-  #map {
+  .inside #map {
     height: 40vh;
   }
   #restaurant-container {
