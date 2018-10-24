@@ -2,7 +2,6 @@
 .vs/slnx.sqlite
 .vs/Salazar-mws-restaurant-stage-1/v15/.suo
 node_modules/ansi-colors/README.md
-gulpfile.js
 package.json
 package-lock.json
 node_modules/.bin/gulp
