@@ -3,12 +3,15 @@ const sass = require("gulp-sass");
 const autoprefixer = require("gulp-autoprefixer");
 const browserSync = require("browser-sync").create();
 const eslint = require('gulp-eslint');
+const concat = require('gulp-concat');
 
 gulp.task('default', ['copy-html', 'copy-imgs', 'styles', 'lint'], function() {
   gulp.watch('sass/**/*.scss', ['styles']);
   gulp.watch("js/**/*.js", ['lint']);
   gulp.watch('/*.html', ['copy-html']);
   gulp.watch('img/*', ['copy-imgs']);
+  gulp.watch('./*.html')
+    .on('change', broswerSync.reload);
 
   browserSync.init({
     server: "./dist"
@@ -24,6 +27,7 @@ gulp.task('styles', function() {
         browsers: ["last 2 versions"]
       })
     )
+    .pipe(sass({outputStyle: 'compressed'})) // compresses css
     .pipe(gulp.dest("dist/css"))
     .pipe(browserSync.stream());
 });
@@ -36,6 +40,18 @@ gulp.task('copy-html', function() {
 gulp.task('copy-imgs', function() {
   gulp.src('img/*')
     .pipe(gulp.dest('dist/img'));
+});
+
+gulp.task('scripts', function() {
+  gulp.src('js/**/*.js')
+    .pipe(concat('all.js'))
+    .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('scripts-dist', function() {
+  gulp.src('js/**/*.js')
+    .pipe(concat('all.js'))
+    .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('lint', function() {
