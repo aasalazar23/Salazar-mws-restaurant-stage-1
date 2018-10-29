@@ -4,18 +4,20 @@ const autoprefixer = require("gulp-autoprefixer");
 const browserSync = require("browser-sync").create();
 const eslint = require('gulp-eslint');
 
-gulp.task("default", ["styles", "lint"], function() {
-  gulp.watch("sass/**/*.scss", ["styles"]);
+gulp.task('default', ['copy-html', 'copy-imgs', 'styles', 'lint'], function() {
+  gulp.watch('sass/**/*.scss', ['styles']);
   gulp.watch("js/**/*.js", ['lint']);
+  gulp.watch('/*.html', ['copy-html']);
+  gulp.watch('img/*', ['copy-imgs']);
 
   browserSync.init({
-    server: "./"
+    server: "./dist"
   });
 });
 
-gulp.task("styles", function() {
+gulp.task('styles', function() {
   gulp
-    .src("sass/**/*.scss")
+    .src('sass/**/*.scss')
     .pipe(sass().on("error", sass.logError))
     .pipe(
       autoprefixer({
@@ -24,6 +26,16 @@ gulp.task("styles", function() {
     )
     .pipe(gulp.dest("dist/css"))
     .pipe(browserSync.stream());
+});
+
+gulp.task('copy-html', function() {
+  gulp.src('./*.html')
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy-imgs', function() {
+  gulp.src('img/*')
+    .pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('lint', function() {
