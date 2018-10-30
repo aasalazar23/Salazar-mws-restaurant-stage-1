@@ -35,6 +35,19 @@ class DBHelper {
         response.json()
       )
       .then(restaurants => {
+        openDatabase()
+          .then(function(db) {
+            if (!db) return;
+
+            let tx = db.transaction('restStore', 'readwrite');
+            let restStore = tx.objectStore('restStore');
+
+            for (var restraunt of restaurants) {
+              restStore.put(restraunt);
+            }
+          }).then(function() {
+            console.log('added restaurants');
+          });
         callback(null, restaurants);
       })
       .catch(error => console.error('Error: ', error));
@@ -179,3 +192,14 @@ class DBHelper {
   } 
 }
 
+function openDatabase() {
+  if (!navigator.serviceWorker) {
+    return Promise.resolve();
+  }
+
+  const dbPromise = idb.open('restaurantsDB', 1, function(upgradeDB) {
+    let restStore = upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
+  });
+
+  return dbPromise;
+}
