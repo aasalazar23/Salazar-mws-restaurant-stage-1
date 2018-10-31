@@ -46,7 +46,7 @@ self.addEventListener('fetch', function(event) {
             return fetch(fetchRequest).then(
                 function(response) {
                   // checks for valid response
-                  if (!response || response.status !== 200) {
+                  if (!response ) {
                     return response;
                   }
                   // must clone response. each stream can only be used once
