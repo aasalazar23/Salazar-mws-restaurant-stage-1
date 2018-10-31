@@ -48,16 +48,13 @@ gulp.task('copy-html', function() {
 gulp.task('copy-imgs', function() {
   gulp.src('img/*')
   .pipe(responsive({
-          // Resize all JPG images to three different sizes: 200, 500, and 630 pixels
+          // Resize all JPG images to three different sizes: 200, 500
           '*.jpg': [{
             width: 200,
             rename: { suffix: '-200px' },
           }, {
             width: 500,
             rename: { suffix: '-500px' },
-          }, {
-            width: 630,
-            rename: { suffix: '-630px' },
           }, {
             // Compress, strip metadata, and rename original image
             rename: { suffix: '-original' },
