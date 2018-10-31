@@ -37,7 +37,6 @@ self.addEventListener('fetch', function(event) {
       caches.match(event.request)
           .then(function(response) {
             // cache hit - return response
-            console.log(event.request.url);
             if (response) {
               console.log('yay returned our cache!');
               return response;
@@ -56,7 +55,6 @@ self.addEventListener('fetch', function(event) {
                   caches.open(CACHE_NAME)
                       .then(function(cache) {
                         cache.put(event.request, responseToCache);
-                        console.log('new url response stored: ', event.request.url);
                       });
                   return response;
                 }

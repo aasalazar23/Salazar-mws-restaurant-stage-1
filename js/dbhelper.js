@@ -195,7 +195,6 @@ class DBHelper {
 
 static registerServiceWorker() {
   if (!navigator.serviceWorker) return;
-  console.log('did i get here?');
   navigator.serviceWorker.register('/sw.js')
     .then(registration => console.log('Service Worker Registered with scope: ', registration.scope), err => console.log('service worker failed: ', err));
 }
