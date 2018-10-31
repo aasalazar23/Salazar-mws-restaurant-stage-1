@@ -28,6 +28,7 @@ tabOrder = () => {
  * Fetch all neighborhoods and set their HTML.
  */
 fetchNeighborhoods = () => {
+  //console.log('fetchNeighborhoods from main.js');
   DBHelper.fetchNeighborhoods((error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
@@ -58,6 +59,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * Fetch all cuisines and set their HTML.
  */
 fetchCuisines = () => {
+  //console.log('fetchCusines from main.js');
   DBHelper.fetchCuisines((error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);

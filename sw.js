@@ -17,7 +17,6 @@ var urlsToCache = [
   '/img/8.jpg',
   '/img/9.jpg',
   '/img/10.jpg',
-  'data/restaurants.json',
 ];
 
 
@@ -26,7 +25,7 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
       caches.open(CACHE_NAME)
           .then(function(cache) {
-            console.log('opened cache');
+            //console.log('opened cache');
             return cache.addAll(urlsToCache);
           })
   );
@@ -38,7 +37,7 @@ self.addEventListener('fetch', function(event) {
           .then(function(response) {
             // cache hit - return response
             if (response) {
-              console.log('yay returned our cache!');
+              //console.log('yay returned our cache!');
               return response;
             }
             // must clone request. each stream can only be used once
@@ -70,7 +69,7 @@ self.addEventListener('activate', function(event) {
 
   event.waitUntil(
       caches.keys().then(function(cacheNames) {
-        console.log(cacheNames);
+        //console.log(cacheNames);
         return Promise.all(
             cacheNames.map(function(cacheName) {
               if (cacheWhitelist.indexOf(cacheName) === -1) {

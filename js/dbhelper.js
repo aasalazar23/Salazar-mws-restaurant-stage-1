@@ -1,8 +1,50 @@
 /**
  * Common database helper functions.
  */
-class DBHelper {
 
+// creates indexedDB database object
+function openDatabase() {
+  if (!navigator.serviceWorker) {
+    return Promise.resolve();
+  }
+
+  const dbPromise = idb.open('restaurantsDB', 1, function(upgradeDB) {
+    upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
+  });
+
+  return dbPromise;
+}
+
+class DBHelper {
+  /**
+   * get cached restaurants from indexedDB
+   */
+  static getCachedRest(dbPromise) {
+    return dbPromise.then(function(db) {
+      if (!db) {
+        console.log('no db found');
+        return;
+      }
+      let tx = db.transaction('restStore');
+      let restStore = tx.objectStore('restStore');
+
+      return restStore.getAll(); // returns a promise
+    })
+  }
+
+  static putCachedRest(dbPromise, restaurants) {
+    return dbPromise.then(function(db) {
+      if (!db) return;
+
+      let tx = db.transaction('restStore', 'readwrite');
+      let restStore = tx.objectStore('restStore');
+
+      for (var restraunt of restaurants) {
+        restStore.put(restraunt);
+      }
+      tx.complete;
+    });
+  }
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -16,39 +58,27 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-/*    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
-*/  
-    fetch(DBHelper.DATABASE_URL)
-      .then(response => 
-        response.json()
-      )
+    const restDB = openDatabase();
+    DBHelper.getCachedRest(restDB)
       .then(restaurants => {
-        openDatabase()
-          .then(function(db) {
-            if (!db) return;
-
-            let tx = db.transaction('restStore', 'readwrite');
-            let restStore = tx.objectStore('restStore');
-
-            for (var restraunt of restaurants) {
-              restStore.put(restraunt);
-            }
-          }).then(function() {
-            console.log('added restaurants');
-          });
-        callback(null, restaurants);
+        if (restaurants && restaurants.length > 0) {
+          // if restaurants in cache, pass them to callback
+          console.log('loaded restaurants from db');
+          callback(null, restaurants);
+        } else {
+          // if no restaurants in cache, fetch from network
+          fetch(DBHelper.DATABASE_URL).then(response => {
+            console.log('getting restaurants from network');
+            if (!response) return;
+            return response.json();
+          })
+          .then(restaurants => {
+            // put data into indexedDB
+            DBHelper.putCachedRest(restDB, restaurants);
+            callback(null, restaurants);
+            console.log('added restaurants to db');
+          })
+        }
       })
       .catch(error => console.error('Error: ', error));
   
@@ -202,14 +232,4 @@ static registerServiceWorker() {
 
 }
 
-function openDatabase() {
-  if (!navigator.serviceWorker) {
-    return Promise.resolve();
-  }
 
-  const dbPromise = idb.open('restaurantsDB', 1, function(upgradeDB) {
-    let restStore = upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
-  });
-
-  return dbPromise;
-}
