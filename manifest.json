@@ -3,12 +3,12 @@
   "name": "Restaurant Reviews",
   "icons": [
     {
-      "src": "/img/reviews_icon",
+      "src": "/reviews_icon",
       "type": "image/svg",
       "sizes": "192x192"
     },
     {
-        "src": "/img/reviews_icon",
+        "src": "/reviews_icon",
         "type": "image/svg",
         "sizes": "512x512"
       }
