@@ -91,11 +91,11 @@ gulp.task('scripts', function(cb) {
 gulp.task('scripts-dist', function(cb) {
   pump([
     gulp.src('js/**/*.js'),
-    sourcemaps.init(),
+    //sourcemaps.init(),
     //babel(),
-    concat('all.js'), //concatonation
+    //concat('all.js'), //concatonation
     uglify(), // minimization
-    sourcemaps.write(),
+    //sourcemaps.write(),
     gulp.dest('dist/js')
   ], cb);
 });
