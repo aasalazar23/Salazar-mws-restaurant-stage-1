@@ -50,11 +50,11 @@ gulp.task('copy-imgs', function() {
   .pipe(responsive({
           // Resize all JPG images to three different sizes: 200, 500
           '*.jpg': [{
-            width: 200,
-            rename: { suffix: '-200px' },
+            width: 300,
+            rename: { suffix: '-300px' },
           }, {
-            width: 500,
-            rename: { suffix: '-500px' },
+            width: 480,
+            rename: { suffix: '-480px' },
           }, {
             // Compress, strip metadata, and rename original image
             rename: { suffix: '-original' },
