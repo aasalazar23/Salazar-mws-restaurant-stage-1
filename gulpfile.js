@@ -46,7 +46,7 @@ gulp.task('copy-html', function() {
 });
 
 gulp.task('copy-imgs', function() {
-  gulp.src('img/*')
+  gulp.src('./img-originals/*')
   .pipe(responsive({
           // Resize all JPG images to three different sizes: 200, 500
           '*.jpg': [{
@@ -75,7 +75,7 @@ gulp.task('copy-imgs', function() {
           // Strip all metadata
           withMetadata: false,
         }))
-  .pipe(gulp.dest('dist/img'));
+  .pipe(gulp.dest('./img'));
 });
 
 gulp.task('scripts', function(cb) {
