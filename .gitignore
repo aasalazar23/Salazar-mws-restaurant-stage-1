@@ -7,6 +7,5 @@ package-lock.json
 node_modules/*
 .eslintrc.js
 gulpfile.js
-dist/img/*
 /img/*
 /img-originals/*
