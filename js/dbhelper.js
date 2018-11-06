@@ -198,6 +198,13 @@ class DBHelper {
   static urlForRestaurant(restaurant) {
     return (`./restaurant.html?id=${restaurant.id}`);
   }
+  
+  /**
+   * Restaurant reviews URL.
+   */
+  static reviewUrlForRestaurant(restaurant) {
+    return (`./reviews/?restaurant_id=${restaurant.id}`);
+  }
 
   /**
    * Restaurant image URL.
