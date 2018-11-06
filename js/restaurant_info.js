@@ -111,9 +111,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.setAttribute("alt", restaurant.alt_text);
-  image.setAttribute("tabindex", "0");
+  image.src = `/img/${restaurant.photograph}-300px.jpg`;
+  image.srcset=`/img/${restaurant.photograph}-original.jpg 700w, /img/${restaurant.photograph}-480px.jpg 400w, /img/${restaurant.photograph}-300px.jpg 200w`;
+  image.alt = `Picture of ${restaurant.name} restaurant`;
+  image.tabIndex = "0";
 
 
 
