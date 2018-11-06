@@ -156,14 +156,16 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
-
+  const ul = document.getElementById('reviews-list');
   if (!reviews) {
+    const noReviewsLi = document.createElement('li');
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
+    noReviews.className = 'no-reviews';
+    noReviewsLi.appendChild(noReviews);
+    ul.appendChild(noReviewsLi);
     return;
   }
-  const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });

@@ -26,7 +26,7 @@ gulp.task('default', ['copy-html', 'copy-imgs', 'styles', 'lint'], function() {
   });
 });
 
-gulp.task('styles', function() {
+gulp.task('styles-dist', function() {
   gulp
     .src('sass/**/*.scss')
     .pipe(sass().on("error", sass.logError))
@@ -37,6 +37,19 @@ gulp.task('styles', function() {
     )
     .pipe(sass({outputStyle: 'compressed'})) // compresses css
     .pipe(gulp.dest("dist/css"))
+    .pipe(browserSync.stream());
+});
+
+gulp.task('styles', function() {
+  gulp
+    .src('sass/**/*.scss')
+    .pipe(sass().on("error", sass.logError))
+    .pipe(
+      autoprefixer({
+        browsers: ["last 2 versions"]
+      })
+    )
+    .pipe(gulp.dest("./css"))
     .pipe(browserSync.stream());
 });
 

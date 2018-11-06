@@ -288,6 +288,10 @@ header {
   justify-self: center;
   line-height: 100%; }
 
+.no-reviews {
+  font-size: 5vmin;
+  justify-self: center; }
+
 #reviews-list li {
   grid-area: review-li;
   display: grid;
