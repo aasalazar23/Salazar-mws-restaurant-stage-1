@@ -39,8 +39,8 @@ class DBHelper {
       let tx = db.transaction('restStore', 'readwrite');
       let restStore = tx.objectStore('restStore');
 
-      for (var restraunt of restaurants) {
-        restStore.put(restraunt);
+      for (var restaurant of restaurants) {
+        restStore.put(restaurant);
       }
       tx.complete;
     });
