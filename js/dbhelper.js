@@ -49,9 +49,14 @@ class DBHelper {
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
+  
   static get DATABASE_URL() {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`;
+  }
+  static REVIEW_URL(id) {
+    const port = 1337 // Change this to your server port
+    return `http://localhost:${port}/reviews/?restaurant_id=${id}`;
   }
 
   /**
@@ -95,6 +100,7 @@ class DBHelper {
       } else {
         const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
+          fetch(DBHelper.REVIEW_URL(id)).then(res => res.json()).then(data => restaurant["reviews"] = data);
           callback(null, restaurant);
         } else { // Restaurant does not exist in the database
           callback('Restaurant does not exist', null);
