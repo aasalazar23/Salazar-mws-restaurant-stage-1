@@ -1,4 +1,4 @@
-let restaurant, reviews;
+let restaurant;
 var newMap;
 
 /**
@@ -69,12 +69,14 @@ fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
+      //passes id to fetch reviews
       fetchReviews(id);
       callback(null, restaurant)
     });
   }
 }
 
+/**Fetch reviews for current page */
 fetchReviews = (id) => {
   DBHelper.fetchReviewsByRestaurantID(id, (error, reviews) =>{
     self.reviews = reviews;
@@ -82,11 +84,8 @@ fetchReviews = (id) => {
       console.error(error);
       return;
     }
-    console.log('from info.js: ', reviews);
     fillReviewsHTML(reviews);
   });
-  console.log('testing');
-  fillReviewsHTML();
 }
 /**
  * Create restaurant HTML and add it to the webpage
@@ -120,8 +119,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
+
 }
 
 /**
