@@ -1,4 +1,4 @@
-let restaurant;
+let restaurant, reviews;
 var newMap;
 
 /**
@@ -69,11 +69,25 @@ fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
+      fetchReviews(id);
       callback(null, restaurant)
     });
   }
 }
 
+fetchReviews = (id) => {
+  DBHelper.fetchReviewsByRestaurantID(id, (error, reviews) =>{
+    self.reviews = reviews;
+    if (!reviews) {
+      console.error(error);
+      return;
+    }
+    console.log('from info.js: ', reviews);
+    fillReviewsHTML(reviews);
+  });
+  console.log('testing');
+  fillReviewsHTML();
+}
 /**
  * Create restaurant HTML and add it to the webpage
  */
@@ -135,8 +149,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  console.log(reviews)
+fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';

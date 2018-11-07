@@ -135,14 +135,14 @@ class DBHelper {
   /** Fetch Reviews By Restaurant
    * 
    */
-  static fetchReviewsByRestaurantID(id) {
+  static fetchReviewsByRestaurantID(id, callback) {
     const restDB = openDatabase();
     DBHelper.getCachedReviews(restDB)
       .then(reviews => {
         if (reviews && reviews.length > 0 && reviews["restaurant_id"] === id) {
           // if reviews in cache, pass them to callback
           console.log('loaded reviews from db: ', reviews);
-          //callback(null, reviews);
+          callback(null, reviews);
         } else {
           // if no reviews in cache, fetch from network
           fetch(DBHelper.REVIEW_URL(id)).then(response => {
@@ -153,7 +153,7 @@ class DBHelper {
           .then(reviews => {
             // put data into indexedDB
             DBHelper.putCachedReviews(restDB, reviews);
-            //callback(null, reviews);
+            callback(null, reviews);
             console.log('added reviews to db: ', reviews);
           })
         }
