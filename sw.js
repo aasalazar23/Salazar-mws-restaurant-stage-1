@@ -38,7 +38,11 @@ self.addEventListener('fetch', function(event) {
                   // checks for valid response
                   if (!response ) {
                     return response;
+                  } // protects against reaching storage quota with opaque responses
+                  else if (response.status = 204) {
+                    return response;
                   }
+                  
                   // must clone response. each stream can only be used once
                   let responseToCache = response.clone();
                   caches.open(CACHE_NAME)
