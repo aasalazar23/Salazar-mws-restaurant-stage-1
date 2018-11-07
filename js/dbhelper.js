@@ -142,8 +142,7 @@ class DBHelper {
         if (reviews && reviews.length > 0 && reviews["restaurant_id"] === id) {
           // if reviews in cache, pass them to callback
           console.log('loaded reviews from db: ', reviews);
-          return reviews;
-          //callback(null, restaurants);
+          //callback(null, reviews);
         } else {
           // if no reviews in cache, fetch from network
           fetch(DBHelper.REVIEW_URL(id)).then(response => {
@@ -154,9 +153,8 @@ class DBHelper {
           .then(reviews => {
             // put data into indexedDB
             DBHelper.putCachedReviews(restDB, reviews);
-            //callback(null, restaurants);
-            console.log('added restaurants to db: ', reviews);
-            return reviews;
+            //callback(null, reviews);
+            console.log('added reviews to db: ', reviews);
           })
         }
       })
