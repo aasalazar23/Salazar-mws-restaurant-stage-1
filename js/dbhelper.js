@@ -8,8 +8,13 @@ function openDatabase() {
     return Promise.resolve();
   }
 
-  const dbPromise = idb.open('restaurantsDB', 1, function(upgradeDB) {
-    upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
+  const dbPromise = idb.open('restaurantsDB', 2, upgradeDB => {
+    switch (upgradeDB.oldVersion) {
+      case 0:
+        upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
+      case 1:
+        upgradeDB.createObjectStore('reviewStore', {keyPath: 'restaurant_id'});
+    }
   });
 
   return dbPromise;
@@ -31,7 +36,9 @@ class DBHelper {
       return restStore.getAll(); // returns a promise
     })
   }
-
+  /**
+   * put restaurants in indexedDB
+   */
   static putCachedRest(dbPromise, restaurants) {
     return dbPromise.then(function(db) {
       if (!db) return;
@@ -45,6 +52,42 @@ class DBHelper {
       tx.complete;
     });
   }
+
+  /**
+   * get cached reviews from indexedDB
+   */
+  static getCachedReviews(dbPromise) {
+    return dbPromise.then(function(db) {
+      if (!db) {
+        console.log('no review db found');
+        return;
+      }
+      let tx = db.transaction('reviewStore');
+      let reviewStore = tx.objectStore('reviewStore');
+
+      return reviewStore.getAll();
+    })
+  }
+  /**
+   * put reviews in indexedDB
+   */
+  static putCachedReviews(dbPromise, reviews) {
+    return dbPromise.then(function(db) {
+      if (!db) {
+        console.log('no review db found');
+        return;
+      }
+      let tx = db.transaction('reviewStore', 'readwrite');
+      let reviewStore = tx.objectStore('reviewStore');
+
+      for (var review of reviews) {
+        reviewStore.put(review);
+      }
+      tx.complete;
+    })
+  }
+
+
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
@@ -86,8 +129,8 @@ class DBHelper {
         }
       })
       .catch(error => console.error('Error: ', error));
+  }
   
-}
 
   /**
    * Fetch a restaurant by its ID.
