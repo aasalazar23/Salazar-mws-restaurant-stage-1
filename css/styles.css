@@ -128,8 +128,7 @@ header {
   grid-area: filter;
   display: grid;
   grid-template-areas: "head head" "neigh cusine";
-  grid-column-gap: 2vmin;
-  padding: 1vmin; }
+  grid-column-gap: 2vmin; }
 
 #filter-header {
   grid-area: head; }
