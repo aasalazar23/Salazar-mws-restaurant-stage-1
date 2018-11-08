@@ -187,6 +187,7 @@ fillReviewsHTML = (reviews) => {
  */
 createFormHTML = () => {
   const formContainer = document.getElementById('formContainer');
+  formContainer.removeChild(formButton);
   const formDiv = document.createElement('div');
   formDiv.className = 'formDiv';
   formDiv.innerHTML = formHTML;
