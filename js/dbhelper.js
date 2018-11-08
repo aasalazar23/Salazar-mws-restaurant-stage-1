@@ -94,12 +94,16 @@ class DBHelper {
    */
   
   static get DATABASE_URL() {
-    const port = 1337 // Change this to your server port
+    const port = 1337; // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
   static REVIEW_URL(id) {
-    const port = 1337 // Change this to your server port
+    const port = 1337; // Change this to your server port
     return `http://localhost:${port}/reviews/?restaurant_id=${id}`;
+  }
+  static POST_URL() {
+    const port = 1337;
+    return `http://localhost:${port}/reviews`;
   }
 
   /**
