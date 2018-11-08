@@ -145,11 +145,11 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 }
 
 const formHTML = `
-<form method="POST">
+<form id="reviewForm" method="post" action="${DBHelper.POST_URL()}">
   <label>
     Your name
     <br>
-    <input type="text" id="formName" name="firstname" required>
+    <input type="text" id="formName" name="name" required>
   </label>
   <br>
   <label>
@@ -196,10 +196,23 @@ createFormHTML = () => {
   const formContainer = document.getElementById('formContainer');
   formContainer.removeChild(formButton);
   const formDiv = document.createElement('div');
+  const id = getParameterByName('id');
   formDiv.className = 'formDiv';
   formDiv.innerHTML = formHTML;
   formContainer.appendChild(formDiv);
+  const form = document.getElementById('reviewForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let formData = new FormData(e.target);
+    formData.append('restaurant_id', id);
+    fetch(DBHelper.POST_URL(), {
+      method: "POST",
+      body: formData
+    })
+    formDiv.innerHTML = 'Review submitted!';
+  });
 }
+
 
 /**
  * Create review HTML and add it to the webpage.
@@ -260,3 +273,4 @@ getParameterByName = (name, url) => {
 /**click events for form */
 formButton = document.getElementById('formButton');
 formButton.addEventListener('click', createFormHTML);
+
