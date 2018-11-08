@@ -144,14 +144,28 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   }
 }
 
+const formHTML = `<form method="POST">
+<label>Your name:
+  <input type="text" name="firstname">
+</label>
+<br>
+<label>Restaurant Rating (between 1 and 5):
+  <input type="number" name="rating" min="1" max="5">
+</label>
+<br>
+<label>Review
+  <input type="text"  name="comments">
+</label>
+<br>
+<button type="submit">Submit review</button>
+</form>`
+
 /**
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
+
   const ul = document.getElementById('reviews-list');
   if (!reviews) {
     const noReviewsLi = document.createElement('li');
@@ -166,6 +180,17 @@ fillReviewsHTML = (reviews) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
+}
+
+/**
+ * Create Form HTML
+ */
+createFormHTML = () => {
+  const formContainer = document.getElementById('formContainer');
+  const formDiv = document.createElement('div');
+  formDiv.className = 'formDiv';
+  formDiv.innerHTML = formHTML;
+  formContainer.appendChild(formDiv);
 }
 
 /**
@@ -223,3 +248,7 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+/**click events for form */
+formButton = document.getElementById('formButton');
+formButton.addEventListener('click', createFormHTML);
