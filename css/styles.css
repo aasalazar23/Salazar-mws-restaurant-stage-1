@@ -273,7 +273,7 @@ header {
   grid-area: reviews;
   display: grid;
   width: 100%;
-  grid-template-areas: "rev-head" "reviews-li"; }
+  grid-template-areas: "rev-head" "rev-form" "reviews-li"; }
 
 #reviews-list {
   padding: 0; }
@@ -286,6 +286,10 @@ header {
   letter-spacing: -1px;
   justify-self: center;
   line-height: 100%; }
+
+#formContainer {
+  grid-area: rev-form;
+  background-color: #fff; }
 
 .no-reviews {
   font-size: 5vmin;

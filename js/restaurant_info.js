@@ -146,15 +146,15 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
 const formHTML = `<form method="POST">
 <label>Your name:
-  <input type="text" name="firstname">
+  <input type="text" name="firstname" required>
 </label>
 <br>
 <label>Restaurant Rating (between 1 and 5):
-  <input type="number" name="rating" min="1" max="5">
+  <input type="number" name="rating" min="1" max="5" required>
 </label>
 <br>
 <label>Review
-  <input type="text"  name="comments">
+  <input type="text"  name="comments" maxlength="250">
 </label>
 <br>
 <button type="submit">Submit review</button>

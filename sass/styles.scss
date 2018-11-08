@@ -302,6 +302,7 @@ header {
   width: 100%;
   grid-template-areas: 
     "rev-head"
+    "rev-form"
     "reviews-li";
 }
 #reviews-list {
@@ -315,6 +316,11 @@ header {
   letter-spacing: -1px;
   justify-self: center;
   line-height: 100%;
+}
+
+#formContainer {
+  grid-area: rev-form;
+  background-color: #fff;
 }
 
 .no-reviews {
