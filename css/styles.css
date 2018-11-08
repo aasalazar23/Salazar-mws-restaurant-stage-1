@@ -310,7 +310,8 @@ header {
 
 .review-date {
   grid-area: date;
-  justify-self: end; }
+  justify-self: end;
+  font-size: 3vmin; }
 
 .review-rating {
   grid-area: rating;
