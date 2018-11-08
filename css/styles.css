@@ -289,10 +289,44 @@ header {
 
 #formContainer {
   grid-area: rev-form;
-  background-color: #fff;
-  font-size: 3vmin; }
+  background-color: #eee;
+  font-size: 3vmin;
+  padding: 2vmin; }
 
-#formDiv
+button {
+  background-color: #363636;
+  color: #ddd;
+  padding: 2vmin;
+  margin: 1vmin;
+  border: none;
+  font-size: 2vmin;
+  cursor: pointer; }
+
+button:hover {
+  color: #f58500; }
+
+#formName {
+  width: 50%; }
+
+#formRating {
+  width: 50%; }
+
+#formComments {
+  width: 75%;
+  height: 6vmin; }
+
+#formName, #formRating, #formComments {
+  padding: 1vmin;
+  margin: 1vmin;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out; }
+
+#formName:focus, #formRating:focus, #formComments:focus {
+  width: 100%; }
+
+#formComments:focus {
+  height: 10vmin; }
+
 .no-reviews {
   font-size: 5vmin;
   justify-self: center; }
