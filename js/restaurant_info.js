@@ -181,7 +181,9 @@ createReviewHTML = (review) => {
 
   const date = document.createElement('p');
   date.className = 'review-date';
-  date.innerHTML = review.date;
+  convertTime = new Date(review.updatedAt);
+  reviewTime = `${convertTime.getMonth()}/${convertTime.getDate()}/${convertTime.getFullYear()}`;
+  date.innerHTML = reviewTime;
   li.appendChild(date);
 
   const rating = document.createElement('p');
