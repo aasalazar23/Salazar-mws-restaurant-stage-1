@@ -200,17 +200,23 @@ createFormHTML = () => {
   formDiv.className = 'formDiv';
   formDiv.innerHTML = formHTML;
   formContainer.appendChild(formDiv);
+  
+  
   const form = document.getElementById('reviewForm');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     let formData = new FormData(e.target);
     formData.append('restaurant_id', id);
+    formData.append('createdAt', Date.now());
 
-    let reviewObj = {};
+    let review = {};
     formData.forEach(function(value, key) {
-      reviewObj[key] = value;
+      review[key] = value;
     });
-    let review = JSON.stringify(reviewObj);
+
+    //immediately adds review to list
+    const ul = document.getElementById('reviews-list');
+    ul.prepend(createReviewHTML(review));
 
     DBHelper.postReview(review);
     
@@ -236,7 +242,7 @@ createReviewHTML = (review) => {
 
   const date = document.createElement('p');
   date.className = 'review-date';
-  convertTime = new Date(review.updatedAt);
+  convertTime = new Date(parseInt(review.createdAt));
   reviewTime = `${convertTime.getMonth()}/${convertTime.getDate()}/${convertTime.getFullYear()}`;
   date.innerHTML = reviewTime;
   li.appendChild(date);
