@@ -11,9 +11,12 @@ function openDatabase() {
   const dbPromise = idb.open('restaurantsDB', 2, upgradeDB => {
     switch (upgradeDB.oldVersion) {
       case 0:
-        upgradeDB.createObjectStore('restStore', {keyPath: 'id'});
+        upgradeDB.createObjectStore('restaurantStore', {keyPath: 'id'});
       case 1:
-        upgradeDB.createObjectStore('reviewStore', {keyPath: 'id'});
+        let reviewStore = upgradeDB.createObjectStore('reviewStore', {keyPath: 'id'});
+
+        // creates index by restaurant id, allows nonunique values
+        reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
     }
   });
 
@@ -30,8 +33,8 @@ class DBHelper {
         console.log('no db found');
         return;
       }
-      let tx = db.transaction('restStore');
-      let restStore = tx.objectStore('restStore');
+      let tx = db.transaction('restaurantStore');
+      let restStore = tx.objectStore('restaurantStore');
 
       return restStore.getAll(); // returns a promise
     })
@@ -43,8 +46,8 @@ class DBHelper {
     return dbPromise.then(function(db) {
       if (!db) return;
 
-      let tx = db.transaction('restStore', 'readwrite');
-      let restStore = tx.objectStore('restStore');
+      let tx = db.transaction('restaurantStore', 'readwrite');
+      let restStore = tx.objectStore('restaurantStore');
 
       for (var restaurant of restaurants) {
         restStore.put(restaurant);
@@ -134,7 +137,12 @@ class DBHelper {
       })
       .catch(error => console.error('Error: ', error));
   }
-  
+  static postReview(review) {
+    const restDB = openDatabase();
+    console.log(review);
+    DBHelper.putCachedReviews(restDB, review);
+    console.log('posted your review');
+  }
 
   /** Fetch Reviews By Restaurant
    * 
@@ -147,7 +155,7 @@ class DBHelper {
           // if reviews in cache, pass them to callback
           console.log('loaded reviews from db: ', reviews);
           callback(null, reviews);
-        } else {
+        }
           // if no reviews in cache, fetch from network
           fetch(DBHelper.REVIEW_URL(id)).then(response => {
             console.log('getting reviews from network');
@@ -160,7 +168,6 @@ class DBHelper {
             callback(null, reviews);
             console.log('added reviews to db: ', reviews);
           })
-        }
       })
       .catch(error => console.error('Error: ', error));
   }
@@ -176,9 +183,6 @@ class DBHelper {
       } else {
         const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
-          //fetch(DBHelper.REVIEW_URL(id)).then(res => res.json()).then(data => restaurant["reviews"] = data);
-          //reviews = DBHelper.fetchReviewsByRestaurantID(id);
-          //console.log('from helper.js: ', reviews);
           callback(null, restaurant);
         } else { // Restaurant does not exist in the database
           callback('Restaurant does not exist', null);
