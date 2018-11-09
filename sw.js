@@ -37,37 +37,43 @@ self.addEventListener('fetch', function(event) {
         })
     );
   } else {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function(response) {
-              // cache hit - return response
-              if (response) return response;
-              // must clone request. each stream can only be used once
-              let fetchRequest = event.request.clone();
-              
-              // helps prevent storage quota overflow 
-              //if (fetchRequest.url.includes('mapbox')) {
-              //  return fetch(fetchRequest)
-              //}
+    if (event.request.url.includes('mapbox')) {
+      // prevents storage of mapbox imgs that fill storage quota 
+      event.respondWith(
+        fetch(event.request).then(function(response) { return response})
+        .catch(function() {
+          return response;
+        })
+      )
+    } else {
+      event.respondWith(
+          caches.match(event.request)
+              .then(function(response) {
+                // cache hit - return response
+                if (response) return response;
+                // must clone request. each stream can only be used once
+                let fetchRequest = event.request.clone();
+                
 
-              return fetch(fetchRequest).then(
-                  function(response) {
-                    // checks for valid response
-                    if (!response ) {
+                return fetch(fetchRequest).then(
+                    function(response) {
+                      // checks for valid response
+                      if (!response ) {
+                        return response;
+                      } 
+                      
+                      // must clone response. each stream can only be used once
+                      let responseToCache = response.clone();
+                      caches.open(staticCacheName)
+                          .then(function(cache) {
+                            cache.put(event.request, responseToCache);
+                          });
                       return response;
-                    } 
-                    
-                    // must clone response. each stream can only be used once
-                    let responseToCache = response.clone();
-                    caches.open(staticCacheName)
-                        .then(function(cache) {
-                          cache.put(event.request, responseToCache);
-                        });
-                    return response;
-                  }
-              );
-            })
-    );
+                    }
+                );
+              })
+      );
+    }
   }
 });
 
