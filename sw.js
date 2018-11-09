@@ -1,4 +1,4 @@
-var CACHE_NAME = 'restaurant-v4';
+var staticCacheName = 'restaurant-v4';
 var urlsToCache = [
   '/',
   '/css/styles.css',
@@ -59,7 +59,7 @@ self.addEventListener('fetch', function(event) {
                     
                     // must clone response. each stream can only be used once
                     let responseToCache = response.clone();
-                    caches.open(CACHE_NAME)
+                    caches.open(staticCacheName)
                         .then(function(cache) {
                           cache.put(event.request, responseToCache);
                         });
@@ -73,18 +73,16 @@ self.addEventListener('fetch', function(event) {
 
 
 self.addEventListener('activate', function(event) {
-
-  let cacheWhitelist = [CACHE_NAME];
-
   event.waitUntil(
       caches.keys().then(function(cacheNames) {
         //console.log(cacheNames);
         return Promise.all(
-            cacheNames.map(function(cacheName) {
-              if (cacheWhitelist.indexOf(cacheName) === -1) {
-                return caches.delete(cacheName);
-              }
-            })
+          cacheNames.filter(function(cacheName) {
+            return cacheName.startsWith('restaurant-') &&
+              cacheName != staticCacheName;
+          }).map(function(cacheName) {
+            return cache.delete(cacheName);
+          })
         );
       })
   );
