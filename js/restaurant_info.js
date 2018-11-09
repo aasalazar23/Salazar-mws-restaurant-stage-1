@@ -205,6 +205,15 @@ createFormHTML = () => {
     e.preventDefault();
     let formData = new FormData(e.target);
     formData.append('restaurant_id', id);
+
+    let reviewObj = {};
+    formData.forEach(function(value, key) {
+      reviewObj[key] = value;
+    });
+    let review = JSON.stringify(reviewObj);
+
+    DBHelper.postReview(review);
+    
     fetch(DBHelper.POST_URL(), {
       method: "POST",
       body: formData
