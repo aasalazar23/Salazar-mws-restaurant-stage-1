@@ -17,6 +17,8 @@ function openDatabase() {
 
         // creates index by restaurant id, allows nonunique values
         reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
+
+        upgradeDB.createObjectStore('offlineStore', {keyPath: 'createdAt'});
     }
   });
 
@@ -86,6 +88,7 @@ class DBHelper {
       for (var review of reviews) {
         reviewStore.put(review);
       }
+
       tx.complete;
     })
   }
@@ -137,12 +140,22 @@ class DBHelper {
       })
       .catch(error => console.error('Error: ', error));
   }
-  static postReview(review) {
-    const restDB = openDatabase();
+
+  /**If offline, adds review to this store
+   * 
+   */
+  static storeOffline(review) {
+    let restDB = openDatabase();
     console.log(review);
-    DBHelper.putCachedReviews(restDB, review);
-    console.log('posted your review');
+    restDB.then(function(db) {
+      let tx = db.transaction('offlineStore', 'readwrite');
+      let offlineStore = tx.objectStore('offlineStore');
+  
+      offlineStore.put(review);
+      tx.complete;
+    });
   }
+
 
   /** Fetch Reviews By Restaurant
    * 
