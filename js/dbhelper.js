@@ -13,7 +13,7 @@ function openDatabase() {
       case 0:
         upgradeDB.createObjectStore('restaurantStore', {keyPath: 'id'});
       case 1:
-        let reviewStore = upgradeDB.createObjectStore('reviewStore', {keyPath: 'id'});
+        let reviewStore = upgradeDB.createObjectStore('reviewStore', {keyPath: 'createdAt'});
 
         // creates index by restaurant id, allows nonunique values
         reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
@@ -148,10 +148,12 @@ class DBHelper {
     let restDB = openDatabase();
     console.log(review);
     restDB.then(function(db) {
-      let tx = db.transaction('offlineStore', 'readwrite');
+      let tx = db.transaction(['offlineStore', 'reviewStore'], 'readwrite');
       let offlineStore = tx.objectStore('offlineStore');
+      let reviewStore = tx.objectStore('reviewStore');
   
       offlineStore.put(review);
+      reviewStore.put(review);
       tx.complete;
     });
   }
