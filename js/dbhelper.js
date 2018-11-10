@@ -146,16 +146,25 @@ class DBHelper {
    */
   static storeOffline(review) {
     let restDB = openDatabase();
-    console.log(review);
-    restDB.then(function(db) {
+    return restDB.then(function(db) {
       let tx = db.transaction(['offlineStore', 'reviewStore'], 'readwrite');
       let offlineStore = tx.objectStore('offlineStore');
       let reviewStore = tx.objectStore('reviewStore');
   
-      offlineStore.put(review);
+      
       reviewStore.put(review);
-      tx.complete;
+      offlineStore.put(review);
     });
+  }
+
+  static emptyOfflineStore() {
+    let restDB = openDatabase();
+    restDB.then(db => {
+      let tx = db.transaction('offlineStore', 'readwrite');
+      let offlineStore = tx.objectStore('offlineStore');
+
+      offlineStore.clear().then(() => console.log('deleted'));
+    })
   }
 
 
@@ -336,9 +345,18 @@ class DBHelper {
 static registerServiceWorker() {
   if (!navigator.serviceWorker) return;
   navigator.serviceWorker.register('/sw.js')
-    .then(registration => console.log('Service Worker Registered with scope: ', registration.scope), err => console.log('service worker failed: ', err));
+    .then( () => 
+        console.log('service worker registered')
+    ).catch(err => console.log(err));
 }
 
+
+static syncReviewPost() {
+  navigator.serviceWorker.ready
+    .then(swRegistration => { 
+      return swRegistration;
+    });
+}
 
 }
 

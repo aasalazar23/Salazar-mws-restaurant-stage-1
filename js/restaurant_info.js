@@ -200,32 +200,45 @@ createFormHTML = () => {
   formDiv.className = 'formDiv';
   formDiv.innerHTML = formHTML;
   formContainer.appendChild(formDiv);
-  
-  
-  const form = document.getElementById('reviewForm');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let formData = new FormData(e.target);
-    formData.append('restaurant_id', id);
-    formData.append('createdAt', Date.now());
 
-    let review = {};
-    formData.forEach(function(value, key) {
-      review[key] = value;
-    });
-
-    //immediately adds review to list
-    const ul = document.getElementById('reviews-list');
-    ul.prepend(createReviewHTML(review));
-
-    DBHelper.postReview(review);
+  navigator.serviceWorker.ready.then( registration => {
+    if ('sync' in registration) {
+      const form = document.getElementById('reviewForm');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let formData = new FormData(e.target);
+        formData.append('restaurant_id', id);
+        formData.append('createdAt', Date.now());
     
-    fetch(DBHelper.POST_URL(), {
-      method: "POST",
-      body: formData
-    })
-    formDiv.innerHTML = 'Review submitted!';
-  });
+        // creates object with form data
+        let review = {};
+        formData.forEach(function(value, key) {
+          review[key] = value;
+        });
+    
+        //immediately adds review to list
+        const ul = document.getElementById('reviews-list');
+        ul.prepend(createReviewHTML(review));
+    
+        // posts review object to offline store
+        DBHelper.storeOffline(review).then( () => {
+            // register for sync 
+            return registration.sync.register('postReview');
+          }
+        ).catch(err => {
+          console.log(err);
+
+          // submit post anwyay
+          fetch(DBHelper.POST_URL(), {
+           method: "POST",
+           body: formData
+         });
+        });
+        
+        formDiv.innerHTML = 'Review submitted!';
+      });
+    }
+  }).catch(err => console.log(err));
 }
 
 
