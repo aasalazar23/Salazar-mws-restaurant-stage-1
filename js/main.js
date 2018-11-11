@@ -165,9 +165,11 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     if (restaurant.is_favorite == "true") {
       buttonFav.className = 'isFavorite';
       buttonFav.setAttribute('aria-pressed', 'true');
+      buttonFav.setAttribute('name', 'Currently favorited, click to unfavorite');
     } else {
       buttonFav.className = 'favorite';
       buttonFav.setAttribute('aria-pressed', 'false');
+      buttonFav.setAttribute('name', 'Currently unfavorited, click to favorite');
     }
     favSync(restaurant.id);
   });
@@ -212,6 +214,7 @@ createRestaurantHTML = (restaurant) => {
   card.append(address);
 
   const favorite = document.createElement('button');
+  favorite.setAttribute('aria-label', 'favorite button');
   favorite.setAttribute('id', `button${restaurant.id}`);
   favorite.setAttribute('aria-pressed', 'false');
   favorite.innerHTML = `<i class="fa fa-star"id="favoriteButton${restaurant.id}" z-index="-1">`;
@@ -260,6 +263,7 @@ function favSync(id) {
             // favorites a restaurant 
             fav.className = 'isFavorite';
             fav.setAttribute('aria-pressed', 'true');
+            fav.setAttribute('name', 'Currently favorited, click to unfavorite');
   
             // sets is_favorite property to true
             restaurant["is_favorite"] = "true";
@@ -272,6 +276,7 @@ function favSync(id) {
             // unfavorites a restaurant
             fav.className = 'favorite';
             fav.setAttribute('aria-pressed', 'false');
+            fav.setAttribute('name', 'Currently unfavorited, click to favorite');
   
             // sets is_favorite property to false
             restaurant["is_favorite"] = "false";

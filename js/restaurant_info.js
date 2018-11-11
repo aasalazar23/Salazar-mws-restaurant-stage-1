@@ -119,8 +119,12 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.is_favorite == "true") {
     favorite.className = 'isFavorite';
     ariaFav.setAttribute('aria-pressed', 'true');
+    favorite.setAttribute('aria-pressed', 'true');
+    favorite.setAttribute('name', 'Currently favorited, click to unfavorite');
   } else {
     favorite.className = 'favorite';
+    favorite.setAttribute('aria-pressed', 'true');
+    favorite.setAttribute('name', 'Currently unfavorited, click to favorite');
   }
   favorite.tabIndex = "0";
   favorite.setAttribute("role", "button");
@@ -330,6 +334,8 @@ navigator.serviceWorker.ready.then( registration => {
           // favorites a restaurant 
           fav.className = 'isFavorite';
           ariaFav.setAttribute('aria-pressed', 'true');
+          fav.setAttribute('aria-pressed', 'true');
+          fav.setAttribute('name', 'Currently unfavorited, click to favorite');
 
           // sets is_favorite property to true
           restaurant["is_favorite"] = "true";
@@ -342,6 +348,8 @@ navigator.serviceWorker.ready.then( registration => {
           // unfavorites a restaurant
           fav.className = 'favorite';
           ariaFav.setAttribute('aria-pressed', 'false');
+          fav.setAttribute('aria-pressed', 'false');
+          fav.setAttribute('name', 'Currently favorited, click to unfavorite');
 
           // sets is_favorite property to false
           restaurant["is_favorite"] = "false";
