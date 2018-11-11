@@ -350,14 +350,6 @@ static registerServiceWorker() {
     ).catch(err => console.log(err));
 }
 
-
-static syncReviewPost() {
-  navigator.serviceWorker.ready
-    .then(swRegistration => { 
-      return swRegistration;
-    });
-}
-
 }
 
 

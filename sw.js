@@ -1,3 +1,6 @@
+importScripts('/js/idb.js');
+importScripts('/js/dbhelper.js');
+
 var staticCacheName = 'restaurant-v4';
 var urlsToCache = [
   '/',
@@ -23,20 +26,23 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  if (event.request.method == 'POST') {
-    event.respondWith(
-       fetch(event.request.clone())
-        .then(function(response) { return response})
-        .catch(function() {
-            console.log('you are offline');
-            caches.match(event.request.referrer)
-              .then(function(response) {
-                console.log(event.request.referrer);
-                return response;
-              });
-        })
-    );
-  } else {
+  // if (event.request.method == 'POST') {
+  //   event.respondWith(
+  //      fetch(event.request.clone())
+  //       .then(function(response) { 
+  //         console.log('review posted');
+  //         return response})
+  //       .catch(function() {
+  //           console.log('you are offline');
+  //           console.log(request.body);
+  //           caches.match(event.request.referrer)
+  //             .then(function(response) {
+  //               console.log(response);
+  //               return response;
+  //             });
+  //       })
+  //   );
+  // } else {
     if (event.request.url.includes('mapbox')) {
       // prevents storage of mapbox imgs that fill storage quota 
       event.respondWith(
@@ -75,7 +81,8 @@ self.addEventListener('fetch', function(event) {
       );
     }
   }
-});
+//}
+);
 
 
 self.addEventListener('activate', function(event) {
@@ -92,4 +99,34 @@ self.addEventListener('activate', function(event) {
         );
       })
   );
+});
+
+self.addEventListener('sync', function(event) {
+  if (event.tag == 'postReview') {
+    event.waitUntil(
+      idb.open('restaurantsDB')
+      .then((db) => {
+        let tx = db.transaction('offlineStore');
+        let offlineStore = tx.objectStore('offlineStore');
+
+        return offlineStore.getAll();
+      }).then((posts) => {
+        console.log('got all posts from offline store: ', posts);
+        return Promise.all(posts.map(post => {
+          return fetch(DBHelper.POST_URL(), {
+            method: 'POST',
+            body: JSON.stringify(post),
+          }).then(response => {
+            console.log(response);
+            idb.open('restaurantsDB').then(db => {
+              let tx = db.transaction('offlineStore', 'readwrite');
+              let offlineStore = tx.objectStore('offlineStore');
+              return offlineStore.delete(post.createdAt);
+            });
+            console.log('deleted posts from offline');
+          })
+        }))
+      }).catch( err => console.log(err))
+    );
+  }
 });
