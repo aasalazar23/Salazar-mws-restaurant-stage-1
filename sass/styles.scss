@@ -178,7 +178,7 @@ header {
 
   #restaurants-list li {
     display: grid;
-    grid-template-rows: 22vh 11vh;
+    grid-template-rows: 20vh 13vh;
     height: 35vh;
     border: 1vh solid #363636;
     justify-items: right;
@@ -198,26 +198,53 @@ header {
       background-color: rgba(0, 0, 0, .7);
       width: 100%;
       overflow: auto;
+      grid-template-columns: 80% 20%;
+      grid-template-areas: 
+        "restName favorite"
+        "restNeigh favorite"
+        "restAddr favorite";
     }
 
-  #restaurants-list p {
-    color: #ccc;
-    font-size: 4vmin;
-    line-height: 100%;
-  }
 
   #restaurants-list li a {
     color: #f18200;
     font-family: Arial,sans-serif;
     font-size: 5vmin;
     line-height: 100%;
-    padding-top: 2vmin;
     font-weight: 200;
     display: block;
     letter-spacing: 0;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
+    grid-area: restName;
+  }
+
+  #restaurants-list .restaurant-neighborhood {
+    grid-area: restNeigh;
+    color: #ccc;
+    font-size: 4vmin;
+    line-height: 100%;
+  }
+
+  #restaurants-list .restaurant-address {
+    grid-area: restAddr;
+    color: #ccc;
+    font-size: 4vmin;
+    line-height: 100%;
+  }
+
+  #restaurants-list .favorite {
+    grid-area: favorite;
+    align-self: center;
+    font-size: 6vmin;
+  }
+
+  #restaurants-list .isFavorite {
+    color: gold;
+    grid-area: favorite;
+    align-self: center;
+    font-size: 6vmin;
   }
   
 
@@ -240,7 +267,7 @@ header {
   grid-gap: 1vh;
   height: 50vh;
   grid-template-rows: 8vh 3vh 29vh;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 2fr 2fr .5fr;
   padding: 1vh;
   background-color: #fff;
 
@@ -255,7 +282,7 @@ header {
 
 #restaurant-name {
   color: #f18200;
-  font-size: 5vmin;
+  font-size: 4vmin;
   font-weight: 200;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -267,7 +294,7 @@ header {
 
 #restaurant-address {
   grid-row: 2 / 3;
-  grid-column: 1 / 3;
+  grid-column: 1 / 4;
   text-align: center;
   font-size: 4vmin;
 }
@@ -286,7 +313,7 @@ header {
 #restaurant-hours {
   font-size: 3vmin;
   grid-row: 3 / 4;
-  grid-column: 2 / 3;
+  grid-column: 2 / 4;
   overflow: auto;
 }
 #restaurant-hours td {
@@ -294,6 +321,19 @@ header {
   font-size: 3vmin;
 }
 
+#restaurant-fav {
+  font-size: 5vmin;
+  align-self: center;
+  grid-row: 1 / 2;
+  grid-column: 3/ 4;
+}
+#restaurant-container .isFavorite{
+  color: gold;
+  font-size: 5vmin;
+  align-self: center;
+  grid-row: 1 / 2;
+  grid-column: 3/ 4;
+}
 /* ====================== Reviews Card ====================== */
 
 #reviews-container {
@@ -324,7 +364,7 @@ header {
   font-size: 3vmin;
   padding: 2vmin;
 }
-button {
+#formButton {
   background-color:#363636;
   color:  #ddd;
   padding: 2vmin;
@@ -333,7 +373,7 @@ button {
   font-size: 4vmin;
   cursor: pointer;
 }
-button:hover {
+#formButton:hover {
   color: #f58500;
 }
 #formName {
