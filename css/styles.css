@@ -299,7 +299,7 @@ button {
   padding: 2vmin;
   margin: 1vmin;
   border: none;
-  font-size: 2vmin;
+  font-size: 4vmin;
   cursor: pointer; }
 
 button:hover {
