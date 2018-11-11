@@ -27,7 +27,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
 
-    if (event.request.url.includes('mapbox') || event.request.method == "PUT") {
+    if (event.request.url.includes('mapbox')) {
       // prevents storage of mapbox imgs that fill storage quota 
       event.respondWith(
         fetch(event.request).then(function(response) { return response})
@@ -123,11 +123,16 @@ self.addEventListener('sync', function(event) {
       }).then((posts) => {
         console.log('got all posts from favoriteStore store: ', posts);
         return Promise.all(posts.map(post => {
-          // TODO: change url
-          return fetch(DBHelper.POST_URL(), {
-            method: 'POST',
-            body: JSON.stringify(post),
-          }).then(response => {
+          let url;
+            if (post["is_favorite"] == "true") {
+              url = DBHelper.FAVORITE_URL(post["id"]);
+            } else {
+              url = DBHelper.UNFAVORITE_URL(post["id"]);
+            }
+            return fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(post)})
+          .then(response => {
             console.log(response);
             idb.open('restaurantsDB').then(db => {
               let tx = db.transaction('favoriteStore', 'readwrite');

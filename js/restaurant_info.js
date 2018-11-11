@@ -239,12 +239,6 @@ createFormHTML = () => {
           }
         ).catch(err => {
           console.log(err);
-
-          // submit post anwyay
-          fetch(DBHelper.POST_URL(), {
-           method: "POST",
-           body: formData
-         });
         });
         
         formDiv.innerHTML = 'Review submitted!';
@@ -320,6 +314,7 @@ navigator.serviceWorker.ready.then( registration => {
   if ('sync' in registration) {
     const fav = document.getElementById('restaurant-fav');
     fav.addEventListener('click', (e) => {
+      e.preventDefault();
       const id = getParameterByName('id');
       // gets full restaurant object, put kept clearing other fields
       DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -337,7 +332,6 @@ navigator.serviceWorker.ready.then( registration => {
               // register for sync 
               return registration.sync.register('postFavorite');}
               ).catch(err => console.log(err));
-          fetch(DBHelper.FAVORITE_URL(id), {method: 'PUT'});
         } else {
           // unfavorites a restaurant
           fav.className = 'favorite';
@@ -347,7 +341,6 @@ navigator.serviceWorker.ready.then( registration => {
             // register for sync 
             return registration.sync.register('postFavorite');}
             ).catch(err => console.log(err));
-          fetch(DBHelper.UNFAVORITE_URL(id), {method: 'PUT'});
         }
       });
     });
