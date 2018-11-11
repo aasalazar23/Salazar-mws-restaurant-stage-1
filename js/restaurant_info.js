@@ -114,13 +114,14 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.tabIndex = "0";
 
   const favorite = document.getElementById('restaurant-fav');
+  favorite.innerHTML = `<i class="fa fa-star" aria-label="favorite button" role="button" aria-pressed="false" id="favoriteButton${restaurant.id}">`;
+  let ariaFav = document.getElementById(`favoriteButton${restaurant.id}`);
   if (restaurant.is_favorite) {
     favorite.className = 'isFavorite';
-    favorite.setAttribute('aria-pressed', 'true');
+    ariaFav.setAttribute('aria-pressed', 'true');
   } else {
     favorite.className = 'favorite';
   }
-  favorite.innerHTML = '<i class="fa fa-star" aria-label="favorite button" role="button" aria-pressed="false" id="favoriteButton">';
   favorite.tabIndex = "0";
   favorite.setAttribute("role", "button");
 
@@ -323,9 +324,14 @@ navigator.serviceWorker.ready.then( registration => {
           console.error(error);
           return;
         }
+        let ariaFav = document.getElementById(`favoriteButton${restaurant.id}`);
+        
         if (fav.className == 'favorite') {
           // favorites a restaurant 
           fav.className = 'isFavorite';
+          ariaFav.setAttribute('aria-pressed', 'true');
+
+          // sets is_favorite property to true
           restaurant["is_favorite"] = "true";
           DBHelper.storeFavorite(restaurant)
             .then( () => {
@@ -335,6 +341,9 @@ navigator.serviceWorker.ready.then( registration => {
         } else {
           // unfavorites a restaurant
           fav.className = 'favorite';
+          ariaFav.setAttribute('aria-pressed', 'false');
+
+          // sets is_favorite property to false
           restaurant["is_favorite"] = "false";
           DBHelper.storeFavorite(restaurant)
           .then( () => {
