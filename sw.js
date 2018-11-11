@@ -27,7 +27,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('fetch', function(event) {
 
-    if (event.request.url.includes('mapbox')) {
+    if (event.request.url.includes('mapbox') || event.request.method == "PUT") {
       // prevents storage of mapbox imgs that fill storage quota 
       event.respondWith(
         fetch(event.request).then(function(response) { return response})
