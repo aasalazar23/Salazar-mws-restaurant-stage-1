@@ -44,10 +44,12 @@ fetchNeighborhoods = () => {
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
-  select.setAttribute('role', 'menu');
+  select.setAttribute('role', 'menubar');
+  select.setAttribute('aria-haspopup', 'true');
   select.setAttribute('aria-label', 'Neighborhood Filter Menu');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
+    option.setAttribute('role', 'menuitem');
     option.innerHTML = neighborhood;
     option.value = neighborhood;
     option.tabIndex = "0";
@@ -75,10 +77,12 @@ fetchCuisines = () => {
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
-  select.setAttribute('role', 'menu');
+  select.setAttribute('role', 'menubar');
+  select.setAttribute('aria-haspopup', 'true');
   select.setAttribute('aria-label', 'Cuisine Filter Menu');
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
+    option.setAttribute('role', 'menuitem');
     option.innerHTML = cuisine;
     option.value = cuisine;
     option.tabIndex = "0";
