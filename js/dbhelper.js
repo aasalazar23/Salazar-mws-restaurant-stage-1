@@ -112,6 +112,15 @@ class DBHelper {
     return `http://localhost:${port}/reviews`;
   }
 
+  static FAVORITE_URL(restaurant_id) {
+    const port = 1337;
+    return `http://localhost:${port}/${restaurant_id}/is_favorite=true`;
+  }
+  static UNFAVORITE_URL(restaurant_id) {
+    const port = 1337;
+    return `http://localhost:${port}/${restaurant_id}/is_favorite=false`;
+  }
+
   /**
    * Fetch all restaurants.
    */
