@@ -26,23 +26,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // if (event.request.method == 'POST') {
-  //   event.respondWith(
-  //      fetch(event.request.clone())
-  //       .then(function(response) { 
-  //         console.log('review posted');
-  //         return response})
-  //       .catch(function() {
-  //           console.log('you are offline');
-  //           console.log(request.body);
-  //           caches.match(event.request.referrer)
-  //             .then(function(response) {
-  //               console.log(response);
-  //               return response;
-  //             });
-  //       })
-  //   );
-  // } else {
+
     if (event.request.url.includes('mapbox')) {
       // prevents storage of mapbox imgs that fill storage quota 
       event.respondWith(
@@ -81,7 +65,6 @@ self.addEventListener('fetch', function(event) {
       );
     }
   }
-//}
 );
 
 
