@@ -236,14 +236,13 @@ header {
 
   #restaurants-list .favorite {
     grid-area: favorite;
-    align-self: center;
+    color: gray;
     font-size: 6vmin;
   }
 
   #restaurants-list .isFavorite {
     color: gold;
     grid-area: favorite;
-    align-self: center;
     font-size: 6vmin;
   }
   
@@ -323,16 +322,20 @@ header {
 
 #restaurant-fav {
   font-size: 5vmin;
-  align-self: center;
+  color: gray;
   grid-row: 1 / 2;
   grid-column: 3/ 4;
 }
 #restaurant-container .isFavorite{
   color: gold;
   font-size: 5vmin;
-  align-self: center;
   grid-row: 1 / 2;
   grid-column: 3/ 4;
+}
+
+button {
+  background-color: rgba(0, 0, 0, .9);
+  border: none;
 }
 /* ====================== Reviews Card ====================== */
 
