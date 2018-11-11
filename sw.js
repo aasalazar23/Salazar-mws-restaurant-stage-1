@@ -84,6 +84,8 @@ self.addEventListener('activate', function(event) {
   );
 });
 
+
+// Thank you twilio! https://www.twilio.com/blog/2017/02/send-messages-when-youre-back-online-with-service-workers-and-background-sync.html
 self.addEventListener('sync', function(event) {
   if (event.tag == 'postReview') {
     event.waitUntil(
