@@ -52,7 +52,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 #footer {
   background-color: #444;
-  color: #aaa;
+  color: #DBDBDB;
   font-size: 3vmin;
   text-align: center;
   text-transform: uppercase;
@@ -135,7 +135,7 @@ header {
 /* ====================== Filter Layout ====================== */
 .filter-options {
   width: 100%;
-  background-color: #3397DB;
+  background-color: #155B8E;
   align-items: center;
   grid-area: filter;
   display: grid;
@@ -355,9 +355,7 @@ button:hover {
 #formName:focus, #formRating:focus, #formComments:focus {
   width: 100%;
 }
-#formComments:focus {
-  height: 10vmin;
-}
+
 .no-reviews {
   font-size: 5vmin;
   justify-self: center;
