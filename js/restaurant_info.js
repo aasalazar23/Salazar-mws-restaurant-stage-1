@@ -113,6 +113,17 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.alt = `Picture of ${restaurant.name} restaurant`;
   image.tabIndex = "0";
 
+  const favorite = document.getElementById('restaurant-fav');
+  if (restaurant.is_favorite) {
+    favorite.className = 'isFavorite';
+    favorite.setAttribute('aria-pressed', 'true');
+  } else {
+    favorite.className = 'favorite';
+  }
+  favorite.innerHTML = '<i class="fa fa-star" aria-label="favorite button" role="button" aria-pressed="false" id="favoriteButton">';
+  favorite.tabIndex = "0";
+  favorite.setAttribute("role", "button");
+
 
 
   // fill operating hours
@@ -206,6 +217,7 @@ createFormHTML = () => {
       const form = document.getElementById('reviewForm');
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('form button clicked');
         let formData = new FormData(e.target);
         formData.append('restaurant_id', id);
         formData.append('createdAt', Date.now());
@@ -237,6 +249,7 @@ createFormHTML = () => {
         
         formDiv.innerHTML = 'Review submitted!';
       });
+
     }
   }).catch(err => console.log(err));
 }
@@ -301,4 +314,43 @@ getParameterByName = (name, url) => {
 /**click events for form */
 formButton = document.getElementById('formButton');
 formButton.addEventListener('click', createFormHTML);
+
+/**Update favorite status in database */
+navigator.serviceWorker.ready.then( registration => {
+  if ('sync' in registration) {
+    const fav = document.getElementById('restaurant-fav');
+    fav.addEventListener('click', (e) => {
+      const id = getParameterByName('id');
+      // gets full restaurant object, put kept clearing other fields
+      DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+        self.restaurant = restaurant;
+        if (!restaurant) {
+          console.error(error);
+          return;
+        }
+        if (fav.className == 'favorite') {
+          // favorites a restaurant 
+          fav.className = 'isFavorite';
+          restaurant["is_favorite"] = "true";
+          DBHelper.storeFavorite(restaurant)
+            .then( () => {
+              // register for sync 
+              return registration.sync.register('postFavorite');}
+              ).catch(err => console.log(err));
+          fetch(DBHelper.FAVORITE_URL(id), {method: 'PUT'});
+        } else {
+          // unfavorites a restaurant
+          fav.className = 'favorite';
+          restaurant["is_favorite"] = "false";
+          DBHelper.storeFavorite(restaurant)
+          .then( () => {
+            // register for sync 
+            return registration.sync.register('postFavorite');}
+            ).catch(err => console.log(err));
+          fetch(DBHelper.UNFAVORITE_URL(id), {method: 'PUT'});
+        }
+      });
+    });
+  }
+}).catch(err => console.log(err));
 

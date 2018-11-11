@@ -202,6 +202,16 @@ createRestaurantHTML = (restaurant) => {
   neighborhood.tabIndex = "0";
   card.append(address);
 
+  const favorite = document.createElement('p');
+  if (restaurant.is_favorite) {
+    favorite.className = 'isFavorite';
+  } else {
+    favorite.className = 'favorite';
+  }
+  favorite.innerHTML = '<i class="fa fa-star" role="button" aria-pressed="false" id="favoriteButton">'
+  favorite.tabIndex = "0";
+  card.append(favorite);
+
   return li
 }
 
@@ -222,4 +232,3 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 
 } 
-

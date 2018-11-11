@@ -112,4 +112,32 @@ self.addEventListener('sync', function(event) {
       }).catch( err => console.log(err))
     );
   }
+  if (event.tag == 'postFavorite') {
+    event.waitUntil(
+      idb.open('restaurantsDB')
+      .then((db) => {
+        let tx = db.transaction('favoriteStore');
+        let favoriteStore = tx.objectStore('favoriteStore');
+
+        return favoriteStore.getAll();
+      }).then((posts) => {
+        console.log('got all posts from favoriteStore store: ', posts);
+        return Promise.all(posts.map(post => {
+          // TODO: change url
+          return fetch(DBHelper.POST_URL(), {
+            method: 'POST',
+            body: JSON.stringify(post),
+          }).then(response => {
+            console.log(response);
+            idb.open('restaurantsDB').then(db => {
+              let tx = db.transaction('favoriteStore', 'readwrite');
+              let favoriteStore = tx.objectStore('favoriteStore');
+              return favoriteStore.delete(post.createdAt);
+            });
+            console.log('deleted posts from favoriteStore');
+          })
+        }))
+      }).catch( err => console.log(err))
+    );
+  }
 });

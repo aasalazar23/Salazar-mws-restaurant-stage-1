@@ -19,6 +19,7 @@ function openDatabase() {
         reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
 
         upgradeDB.createObjectStore('offlineStore', {keyPath: 'createdAt'});
+        upgradeDB.createObjectStore('favoriteStore', {keyPath: 'createdAt'});
     }
   });
 
@@ -114,11 +115,11 @@ class DBHelper {
 
   static FAVORITE_URL(restaurant_id) {
     const port = 1337;
-    return `http://localhost:${port}/${restaurant_id}/is_favorite=true`;
+    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=true`;
   }
   static UNFAVORITE_URL(restaurant_id) {
     const port = 1337;
-    return `http://localhost:${port}/${restaurant_id}/is_favorite=false`;
+    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=false`;
   }
 
   /**
@@ -176,7 +177,19 @@ class DBHelper {
     })
   }
 
-
+  static storeFavorite(restaurant) {
+      let restDB = openDatabase();
+      return restDB.then(function(db) {
+        let tx = db.transaction(['favoriteStore', 'restaurantStore'], 'readwrite');
+        let favoriteStore = tx.objectStore('favoriteStore');
+        let restaurantStore = tx.objectStore('restaurantStore');
+    
+        
+        restaurantStore.put(restaurant);
+        favoriteStore.put(restaurant);
+      });
+  }
+  
   /** Fetch Reviews By Restaurant
    * 
    */
@@ -349,6 +362,7 @@ class DBHelper {
     return marker;
   }
   
+
 
 
 static registerServiceWorker() {
