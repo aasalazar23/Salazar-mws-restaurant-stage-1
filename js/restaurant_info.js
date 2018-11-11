@@ -116,7 +116,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const favorite = document.getElementById('restaurant-fav');
   favorite.innerHTML = `<i class="fa fa-star" aria-label="favorite button" role="button" aria-pressed="false" id="favoriteButton${restaurant.id}">`;
   let ariaFav = document.getElementById(`favoriteButton${restaurant.id}`);
-  if (restaurant.is_favorite) {
+  if (restaurant.is_favorite == "true") {
     favorite.className = 'isFavorite';
     ariaFav.setAttribute('aria-pressed', 'true');
   } else {
