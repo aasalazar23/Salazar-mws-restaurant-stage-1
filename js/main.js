@@ -161,6 +161,15 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
+    let buttonFav = document.getElementById(`button${restaurant.id}`);
+    if (restaurant.is_favorite == "true") {
+      buttonFav.className = 'isFavorite';
+      buttonFav.setAttribute('aria-pressed', 'true');
+    } else {
+      buttonFav.className = 'favorite';
+      buttonFav.setAttribute('aria-pressed', 'false');
+    }
+    favSync(restaurant.id);
   });
   addMarkersToMap();
 }
@@ -202,13 +211,11 @@ createRestaurantHTML = (restaurant) => {
   neighborhood.tabIndex = "0";
   card.append(address);
 
-  const favorite = document.createElement('p');
-  if (restaurant.is_favorite) {
-    favorite.className = 'isFavorite';
-  } else {
-    favorite.className = 'favorite';
-  }
-  favorite.innerHTML = '<i class="fa fa-star" role="button" aria-pressed="false" id="favoriteButton">'
+  const favorite = document.createElement('button');
+  favorite.setAttribute('id', `button${restaurant.id}`);
+  favorite.setAttribute('aria-pressed', 'false');
+  favorite.innerHTML = `<i class="fa fa-star"id="favoriteButton${restaurant.id}" z-index="-1">`;
+  favorite.classList.add('favClass');
   favorite.tabIndex = "0";
   card.append(favorite);
 
@@ -232,3 +239,50 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 
 } 
+
+
+/**Update favorite status in database */
+function favSync(id) {
+  navigator.serviceWorker.ready.then( registration => {
+    if ('sync' in registration) {
+      const fav = document.getElementById(`button${id}`);
+      fav.addEventListener('click', (e) => {
+        e.preventDefault();
+        // gets full restaurant object, put kept clearing other fields
+        DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+          self.restaurant = restaurant;
+          if (!restaurant) {
+            console.error(error);
+            return;
+          }
+          
+          if (fav.className == 'favorite') {
+            // favorites a restaurant 
+            fav.className = 'isFavorite';
+            fav.setAttribute('aria-pressed', 'true');
+  
+            // sets is_favorite property to true
+            restaurant["is_favorite"] = "true";
+            DBHelper.storeFavorite(restaurant)
+              .then( () => {
+                // register for sync 
+                return registration.sync.register('postFavorite');}
+                ).catch(err => console.log(err));
+          } else {
+            // unfavorites a restaurant
+            fav.className = 'favorite';
+            fav.setAttribute('aria-pressed', 'false');
+  
+            // sets is_favorite property to false
+            restaurant["is_favorite"] = "false";
+            DBHelper.storeFavorite(restaurant)
+            .then( () => {
+              // register for sync 
+              return registration.sync.register('postFavorite');}
+              ).catch(err => console.log(err));
+          }
+        });
+      });
+    }
+  }).catch(err => console.log(err));
+}
