@@ -248,7 +248,7 @@ header {
   width: 100%; }
 
 #restaurant-name {
-  color: #f18200;
+  color: #BD5900;
   font-size: 4vmin;
   font-weight: 200;
   letter-spacing: 0;
@@ -378,7 +378,7 @@ button {
 
 .review-name {
   grid-area: name;
-  color: #f58500;
+  color: #BD5900;
   font-size: 5vmin; }
 
 .review-date {

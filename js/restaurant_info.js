@@ -180,7 +180,7 @@ const formHTML = `
     <input type="text"  id="formComments" name="comments" maxlength="250">
   </label>
   <br>
-  <button type="submit">Submit review</button>
+  <button type="submit" id="formButton">Submit review</button>
 </form>`
 
 /**
