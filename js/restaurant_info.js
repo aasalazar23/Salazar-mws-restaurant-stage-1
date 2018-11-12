@@ -200,7 +200,7 @@ fillReviewsHTML = (reviews) => {
     return;
   }
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    ul.prepend(createReviewHTML(review));
   });
   container.appendChild(ul);
 }
