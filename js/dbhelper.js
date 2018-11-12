@@ -8,11 +8,11 @@ function openDatabase() {
     return Promise.resolve();
   }
 
-  const dbPromise = idb.open('restaurantsDB', 2, upgradeDB => {
-    switch (upgradeDB.oldVersion) {
-      case 0:
+  const dbPromise = idb.open('restaurantsDB', 1, upgradeDB => {
+    //switch (upgradeDB.oldVersion) {
+    //  case 0:
         upgradeDB.createObjectStore('restaurantStore', {keyPath: 'id'});
-      case 1:
+    //  case 1:
         let reviewStore = upgradeDB.createObjectStore('reviewStore', {keyPath: 'createdAt'});
 
         // creates index by restaurant id, allows nonunique values
@@ -20,7 +20,7 @@ function openDatabase() {
 
         upgradeDB.createObjectStore('offlineStore', {keyPath: 'createdAt'});
         upgradeDB.createObjectStore('favoriteStore', {keyPath: 'createdAt'});
-    }
+   // }
   });
 
   return dbPromise;
