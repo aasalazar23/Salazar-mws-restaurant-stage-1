@@ -215,9 +215,10 @@ createRestaurantHTML = (restaurant) => {
 
   const favorite = document.createElement('button');
   favorite.setAttribute('aria-label', 'favorite button');
+  favorite.setAttribute('role', 'button');
   favorite.setAttribute('id', `button${restaurant.id}`);
   favorite.setAttribute('aria-pressed', 'false');
-  favorite.innerHTML = `<i class="fa fa-star"id="favoriteButton${restaurant.id}" z-index="-1">`;
+  favorite.innerHTML = `<i class="fa fa-star"id="favoriteButton${restaurant.id}" role="button" aria-label="favorite-button" z-index="-1">`;
   favorite.classList.add('favClass');
   favorite.tabIndex = "0";
   card.append(favorite);

@@ -118,7 +118,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   let ariaFav = document.getElementById(`favoriteButton${restaurant.id}`);
   if (restaurant.is_favorite == "true") {
     favorite.className = 'isFavorite';
+    favorite.setAttribute('aria-label', 'Currently favorited, click to unfavorite');
     ariaFav.setAttribute('aria-pressed', 'true');
+    ariaFav.setAttribute('aria-label', 'Currently favorited, click to unfavorite');
     favorite.setAttribute('aria-pressed', 'true');
     favorite.setAttribute('name', 'Currently favorited, click to unfavorite');
   } else {
