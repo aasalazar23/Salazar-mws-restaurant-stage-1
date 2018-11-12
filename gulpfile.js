@@ -82,7 +82,7 @@ gulp.task('copy-imgs', function() {
         }, {
           // Global configuration for all images
           // The output quality for JPEG, WebP and TIFF output formats
-          quality: 70,
+          quality: 50,
           // Use progressive (interlace) scan for JPEG and PNG output
           progressive: true,
           // Strip all metadata
