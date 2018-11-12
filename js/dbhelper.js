@@ -5,6 +5,7 @@
 // creates indexedDB database object
 function openDatabase() {
   if (!navigator.serviceWorker) {
+    console.log('no navigator.serviceWorker');
     return Promise.resolve();
   }
 
@@ -150,7 +151,33 @@ class DBHelper {
       })
       .catch(error => console.error('Error: ', error));
   }
+  /**returns all offline reviews
+   * 
+   */
+  static handleOfflineReviews(db) {
+    let restDB = db;
+    restDB.then(function(db) {
+      let tx = db.transaction('offlineStore');
+      let offlineStore = tx.objectStore('offlineStore');
 
+      return offlineStore.getAll();
+    }).then((reviews) => {
+      console.log('got all posts from offline store', reviews);
+      return Promise.all(reviews.map(review => {
+        return fetch(DBHelper.POST_URL(), {
+          method: 'POST',
+          body: JSON.stringify(review)
+        }).then(response => {
+          console.log(response);
+          restDB.then(db =>{
+               let tx = db.transaction('offlineStore', 'readwrite');
+               let offlineStore = tx.objectStore('offlineStore');
+               return offlineStore.delete(review.createdAt);
+          })
+        })
+      }))
+    }).catch(err => console.log(err));
+  }
   /**If offline, adds review to this store
    * 
    */
@@ -173,7 +200,7 @@ class DBHelper {
       let tx = db.transaction('offlineStore', 'readwrite');
       let offlineStore = tx.objectStore('offlineStore');
 
-      offlineStore.clear().then(() => console.log('deleted'));
+      return offlineStore.detle(post.createdAt);
     })
   }
 

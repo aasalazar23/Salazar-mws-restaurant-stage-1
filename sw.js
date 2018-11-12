@@ -88,31 +88,10 @@ self.addEventListener('activate', function(event) {
 // Thank you twilio! https://www.twilio.com/blog/2017/02/send-messages-when-youre-back-online-with-service-workers-and-background-sync.html
 self.addEventListener('sync', function(event) {
   if (event.tag == 'postReview') {
+    let db = openDB();
     event.waitUntil(
-      idb.open('restaurantsDB')
-      .then((db) => {
-        let tx = db.transaction('offlineStore');
-        let offlineStore = tx.objectStore('offlineStore');
-
-        return offlineStore.getAll();
-      }).then((posts) => {
-        console.log('got all posts from offline store: ', posts);
-        return Promise.all(posts.map(post => {
-          return fetch(DBHelper.POST_URL(), {
-            method: 'POST',
-            body: JSON.stringify(post),
-          }).then(response => {
-            console.log(response);
-            idb.open('restaurantsDB').then(db => {
-              let tx = db.transaction('offlineStore', 'readwrite');
-              let offlineStore = tx.objectStore('offlineStore');
-              return offlineStore.delete(post.createdAt);
-            });
-            console.log('deleted posts from offline');
-          })
-        }))
-      }).catch( err => console.log(err))
-    );
+      DBHelper.handleOfflineReviews(db)
+     );
   }
   if (event.tag == 'postFavorite') {
     event.waitUntil(
@@ -148,3 +127,23 @@ self.addEventListener('sync', function(event) {
     );
   }
 });
+
+
+function openDB() {
+  const dbPromise = idb.open('restaurantsDB', 1, upgradeDB => {
+    //switch (upgradeDB.oldVersion) {
+    //  case 0:
+        upgradeDB.createObjectStore('restaurantStore', {keyPath: 'id'});
+    //  case 1:
+        let reviewStore = upgradeDB.createObjectStore('reviewStore', {keyPath: 'createdAt'});
+
+        // creates index by restaurant id, allows nonunique values
+        reviewStore.createIndex('restaurant_id', 'restaurant_id', {unique: false});
+
+        upgradeDB.createObjectStore('offlineStore', {keyPath: 'createdAt'});
+        upgradeDB.createObjectStore('favoriteStore', {keyPath: 'createdAt'});
+   // }
+  });
+
+  return dbPromise;
+}
