@@ -28,6 +28,32 @@ function openDatabase() {
 }
 
 class DBHelper {
+    /**
+   * Database URL.
+   * Change this to restaurants.json file location on your server.
+   */
+  
+  static get DATABASE_URL() {
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/restaurants`;
+  }
+  static REVIEW_URL(id) {
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/reviews/?restaurant_id=${id}`;
+  }
+  static POST_URL() {
+    const port = 1337;
+    return `http://localhost:${port}/reviews`;
+  }
+  static FAVORITE_URL(restaurant_id) {
+    const port = 1337;
+    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=true`;
+  }
+  static UNFAVORITE_URL(restaurant_id) {
+    const port = 1337;
+    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=false`;
+  }
+  /**---------------------Restaurant Handling -------------------------- */
   /**
    * get cached restaurants from indexedDB
    */
@@ -59,70 +85,6 @@ class DBHelper {
       tx.complete;
     });
   }
-
-  /**
-   * get cached reviews from indexedDB
-   */
-  static getCachedReviews(dbPromise) {
-    return dbPromise.then(function(db) {
-      if (!db) {
-        console.log('no review db found');
-        return;
-      }
-      let tx = db.transaction('reviewStore');
-      let reviewStore = tx.objectStore('reviewStore');
-
-      return reviewStore.getAll();
-    })
-  }
-  /**
-   * put reviews in indexedDB
-   */
-  static putCachedReviews(dbPromise, reviews) {
-    return dbPromise.then(function(db) {
-      if (!db) {
-        console.log('no review db found');
-        return;
-      }
-      let tx = db.transaction('reviewStore', 'readwrite');
-      let reviewStore = tx.objectStore('reviewStore');
-
-      for (var review of reviews) {
-        reviewStore.put(review);
-      }
-
-      tx.complete;
-    })
-  }
-
-
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  
-  static get DATABASE_URL() {
-    const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
-  }
-  static REVIEW_URL(id) {
-    const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/reviews/?restaurant_id=${id}`;
-  }
-  static POST_URL() {
-    const port = 1337;
-    return `http://localhost:${port}/reviews`;
-  }
-
-  static FAVORITE_URL(restaurant_id) {
-    const port = 1337;
-    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=true`;
-  }
-  static UNFAVORITE_URL(restaurant_id) {
-    const port = 1337;
-    return `http://localhost:${port}/restaurants/${restaurant_id}/?is_favorite=false`;
-  }
-
   /**
    * Fetch all restaurants.
    */
@@ -151,6 +113,61 @@ class DBHelper {
       })
       .catch(error => console.error('Error: ', error));
   }
+
+
+ /**---------------------Review Handling -------------------------- */
+  /**
+   * get cached reviews from indexedDB
+   */
+  static getCachedReviews(dbPromise, id) {
+    return dbPromise.then(db => {
+      if (!db) {
+        console.log('no review db found');
+        return;
+      }
+      let tx = db.transaction('reviewStore');
+      let reviewStore = tx.objectStore('reviewStore');
+      return reviewStore.getAll();
+    }).then( allReviews => {
+      let reviews = [];
+      for (let review of allReviews) {
+        if (review.restaurant_id == id) {
+          reviews.push(review);
+        }
+      }
+      console.log(reviews);
+      return reviews;
+    });
+  }
+  /**
+   * put reviews in indexedDB
+   */
+  static putCachedReviews(dbPromise, reviews) {
+    return dbPromise.then(function(db) {
+      if (!db) {
+        console.log('no review db found');
+        return;
+      }
+      let tx = db.transaction('reviewStore', 'readwrite');
+      let reviewStore = tx.objectStore('reviewStore');
+
+      for (var review of reviews) {
+        reviewStore.put(review);
+      }
+
+      tx.complete;
+    })
+  }
+    /**
+   * fetch reviews from network
+   */
+  static fetchReviews(id) {
+    return fetch(DBHelper.REVIEW_URL(id)).then(response => {
+      console.log('getting reviews from network');
+      if (!response) return;
+      return response.json();
+    })
+  }
   /**gets all offline reviews, sends them to network, removes them on success
    * 
    */
@@ -164,9 +181,15 @@ class DBHelper {
     }).then((reviews) => {
       console.log('got all posts from offline store', reviews);
       return Promise.all(reviews.map(review => {
+        let body = {
+          "restaurant_id": review.restaurant_id,
+          "name": review.name,
+          "rating": review.rating,
+          "comments": review.comments
+      }
         return fetch(DBHelper.POST_URL(), {
           method: 'POST',
-          body: JSON.stringify(review)
+          body: JSON.stringify(body)
         }).then(response => {
           console.log(response);
           restDB.then(db =>{
@@ -194,16 +217,7 @@ class DBHelper {
     });
   }
 
-  static emptyOfflineStore() {
-    let restDB = openDatabase();
-    restDB.then(db => {
-      let tx = db.transaction('offlineStore', 'readwrite');
-      let offlineStore = tx.objectStore('offlineStore');
-
-      return offlineStore.detle(post.createdAt);
-    })
-  }
-
+   /**---------------------Favorite Handling -------------------------- */
   static storeFavorite(restaurant) {
       let restDB = openDatabase();
       return restDB.then(function(db) {
@@ -219,7 +233,7 @@ class DBHelper {
     /**gets all offline favorites, sends them to network, removes them on success
    * 
    */
-    static handleOfflineFavorites(db) {
+  static handleOfflineFavorites(db) {
       let restDB = db;
       restDB.then(function(db) {
         let tx = db.transaction('favoriteStore');
@@ -252,29 +266,26 @@ class DBHelper {
   /** Fetch Reviews By Restaurant
    * 
    */
+
+
   static fetchReviewsByRestaurantID(id, callback) {
     const restDB = openDatabase();
-    DBHelper.getCachedReviews(restDB)
+    // checks to see if connection available
+    if (navigator.onLine) {
+      //if available, fetch from network and store
+    DBHelper.fetchReviews(id)
       .then(reviews => {
-        if (reviews && reviews.length > 0 && reviews["restaurant_id"] === id) {
-          // if reviews in cache, pass them to callback
-          console.log('loaded reviews from db: ', reviews);
+        // stores reviews in db 
+        DBHelper.putCachedReviews(restDB, reviews);
+        callback(null, reviews);
+      }).catch(err => console.log(err));
+    } else {
+      // if offline, get from cache
+        DBHelper.getCachedReviews(restDB, id).then(reviews => {
+          console.log('reviews from db', reviews);
           callback(null, reviews);
-        }
-          // if no reviews in cache, fetch from network
-          fetch(DBHelper.REVIEW_URL(id)).then(response => {
-            console.log('getting reviews from network');
-            if (!response) return;
-            return response.json();
-          })
-          .then(reviews => {
-            // put data into indexedDB
-            DBHelper.putCachedReviews(restDB, reviews);
-            callback(null, reviews);
-            console.log('added reviews to db: ', reviews);
-          })
-      })
-      .catch(error => console.error('Error: ', error));
+        }).catch(err => console.log(err));
+    }
   }
 
   /**
