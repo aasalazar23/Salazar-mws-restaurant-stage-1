@@ -232,9 +232,12 @@ createFormHTML = () => {
         // creates object with form data
         let review = {};
         formData.forEach(function(value, key) {
-          review[key] = value;
+          if (key == "restaurant_id" || key == "createdAt") {
+            review[key] = parseInt(value);
+          } else {
+            review[key] = value;
+          }
         });
-    
         //immediately adds review to list
         const ul = document.getElementById('reviews-list');
         ul.prepend(createReviewHTML(review));
