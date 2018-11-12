@@ -151,7 +151,7 @@ class DBHelper {
       })
       .catch(error => console.error('Error: ', error));
   }
-  /**returns all offline reviews
+  /**gets all offline reviews, sends them to network, removes them on success
    * 
    */
   static handleOfflineReviews(db) {
@@ -216,7 +216,39 @@ class DBHelper {
         favoriteStore.put(restaurant);
       });
   }
-  
+    /**gets all offline favorites, sends them to network, removes them on success
+   * 
+   */
+    static handleOfflineFavorites(db) {
+      let restDB = db;
+      restDB.then(function(db) {
+        let tx = db.transaction('favoriteStore');
+        let favoriteStore = tx.objectStore('favoriteStore');
+
+        return favoriteStore.getAll();
+      }).then(favorites => {
+        console.log('got all posts from favoriteStore store: ', favorites);
+        return Promise.all(favorites.map(favorite => {
+          let url;
+            if (favorite["is_favorite"] == "true") {
+              url = DBHelper.FAVORITE_URL(favorite["id"]);
+            } else {
+              url = DBHelper.UNFAVORITE_URL(favorite["id"]);
+            }
+            return fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(favorite)})
+          .then(response => {
+            console.log(response);
+            restDB.then(db => {
+              let tx = db.transaction('favoriteStore', 'readwrite');
+              let favoriteStore = tx.objectStore('favoriteStore');
+              return favoriteStore.delete(favorite.createdAt);
+            })
+          })
+        }))
+      }).catch(err => console.log(err));
+    }
   /** Fetch Reviews By Restaurant
    * 
    */

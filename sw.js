@@ -94,36 +94,9 @@ self.addEventListener('sync', function(event) {
      );
   }
   if (event.tag == 'postFavorite') {
+    let db = openDB();
     event.waitUntil(
-      idb.open('restaurantsDB')
-      .then((db) => {
-        let tx = db.transaction('favoriteStore');
-        let favoriteStore = tx.objectStore('favoriteStore');
-
-        return favoriteStore.getAll();
-      }).then((posts) => {
-        console.log('got all posts from favoriteStore store: ', posts);
-        return Promise.all(posts.map(post => {
-          let url;
-            if (post["is_favorite"] == "true") {
-              url = DBHelper.FAVORITE_URL(post["id"]);
-            } else {
-              url = DBHelper.UNFAVORITE_URL(post["id"]);
-            }
-            return fetch(url, {
-            method: 'PUT',
-            body: JSON.stringify(post)})
-          .then(response => {
-            console.log(response);
-            idb.open('restaurantsDB').then(db => {
-              let tx = db.transaction('favoriteStore', 'readwrite');
-              let favoriteStore = tx.objectStore('favoriteStore');
-              return favoriteStore.delete(post.createdAt);
-            });
-            console.log('deleted posts from favoriteStore');
-          })
-        }))
-      }).catch( err => console.log(err))
+      DBHelper.handleOfflineFavorites(db)
     );
   }
 });
