@@ -33,14 +33,21 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   
+  // static get DATABASE_URL() {
+  //   const port = 1337; // Change this to your server port
+  //   return `http://localhost:${port}/restaurants`;
+  // }
+
+  //for Demo
   static get DATABASE_URL() {
-    const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
+      return '/data/restaurants.json';
   }
   static REVIEW_URL(id) {
     const port = 1337; // Change this to your server port
     return `http://localhost:${port}/reviews/?restaurant_id=${id}`;
   }
+
+
   static POST_URL() {
     const port = 1337;
     return `http://localhost:${port}/reviews`;
